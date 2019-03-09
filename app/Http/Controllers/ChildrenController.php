@@ -123,11 +123,11 @@ class ChildrenController extends Controller
 
     public function managePrivileges($id, $startDay = false, $endDay = false){
     	if($startDay === false){
-            $startDay = Carbon::now();
+            $startDay = Helpers::userTimeCurrent();
         }
 
         if($endDay === false){
-            $endDay = Carbon::now();
+            $endDay = Helpers::userTimeCurrent();
         }
 
         $child = Child::find($id);

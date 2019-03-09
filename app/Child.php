@@ -47,7 +47,7 @@ class Child extends Model
     public function current_bans()
     {
     	return $this->belongsToMany('App\Privilege')
-    		->wherePivot('start_ban', '=', Carbon::now())
+    		->wherePivot('start_ban', '=', Helpers::userTimeCurrent())
     		->withPivot('start_ban');	
     }
 
