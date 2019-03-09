@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Child;
 use App\User;
 use App\Privilege;
+use App\Http\Controllers\ChidrenController;
 
 class HomeController extends Controller
 {
@@ -16,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -50,5 +51,20 @@ class HomeController extends Controller
         }
 
         return view('children-status')->withChildren($children)->withAvailablePrivileges($allPrivileges);
+    }
+
+    public function childPrivilegesAPI($childID, Request $request){
+        $user = User::find(1);
+        $child = Child::find($childID);
+        $requestVars = $request->all();
+        $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
+        
+        $allPrivileges = Privilege::whereIn('id', $child->privileges)->get();
+
+        $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
+
+        $privilegeEvents = Child::privilegeEvents($child->privilegeStatus);
+        
+        return response()->json($privilegeEvents);
     }
 }
