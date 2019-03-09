@@ -224,7 +224,7 @@ class ChildrenController extends Controller
 
 
                 if(isset($theID->pivot->id)){
-                    $this->child->privileges()->detach([$theID->pivot->id]);
+                    $this->child->privileges()->wherePivot('id', $theID->pivot->id)->detach();
                     $numProcessed++;
                 }
             }
