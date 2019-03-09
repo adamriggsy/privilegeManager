@@ -219,10 +219,12 @@ class ChildrenController extends Controller
                 $theID = $this->child->privileges()
                     ->where('privilege_id', $request->get('privilege'))
                     ->where('start_ban', '=', $date->format('Y-m-d'))
+                    ->withPivot('id')
                     ->first();
 
-                if(isset($theID->id)){
-                    $this->child->privileges()->detach($theID->id);
+
+                if(isset($theID->pivot->id)){
+                    $this->child->privileges()->detach([$theID->pivot->id]);
                     $numProcessed++;
                 }
             }
