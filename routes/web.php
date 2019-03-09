@@ -35,4 +35,7 @@ Route::resource('privileges', 'PrivilegeController')->except([
     'index'
 ]);;
 
-Route::get('/child-privilege-feed/{id}', 'ChildrenController@childPrivilegesAPI')->name('childPrivilegeFeed');
+Route::get('/ajax/child-privilege-feed/{id}', 'ChildrenController@childPrivilegesAJAX')->name('childPrivilegeFeed');
+
+Route::post('/ajax/child-privilege/{id}/update', 'ChildrenController@childPrivilegesUpdate')->name('childPrivilegeUpdate');
+

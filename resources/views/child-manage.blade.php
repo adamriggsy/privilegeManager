@@ -1,3 +1,7 @@
+@php
+    use App\Http\Controllers\Helpers;
+@endphp
+
 @extends('layouts.app')
 
 @section('localStyles')
@@ -32,7 +36,7 @@
             var calendar = $('#calendar').fullCalendar({
                 defaultView: 'listWeek',
                 events: {
-                    url: '/child-privilege-feed/{{$child->id}}',
+                    url: '{{route('childPrivilegeFeed', ['id' => $child->id])}}',
                     type: 'GET', // Send post data
                     error: function() {
                         alert('There was an error while fetching events.');
@@ -75,9 +79,7 @@
 
             var theDate = $(this).closest('.modal').data('date');
             var privilege = $(this).closest('.modal').data('privilege');
-            console.log(theDate);
-            console.log(privilege);
-
+            
             window.location.href = '/child/{{$child->id}}/privilege/restore?date=' + theDate + '&privilege=' + privilege;
         });
 
@@ -86,9 +88,7 @@
 
             var theDate = $(this).closest('.modal').data('date');
             var privilege = $(this).closest('.modal').data('privilege');
-            console.log(theDate);
-            console.log(privilege);
-
+            
             window.location.href = '/child/{{$child->id}}/privilege/ban?date=' + theDate + '&privilege=' + privilege;
         });
     </script>
@@ -112,12 +112,12 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3>{{$child->name}} <span class="float-right">{{ \Carbon\Carbon::now()->format('m/d/Y')}}</span></h3>
+                        <h3><a href="{{route('child.edit', ['id' => $child->id])}}">{{$child->name}}</a> <span class="float-right">{{ Helpers::userTimeCurrent('m/d/Y') }}</span></h3>
                     </div>
                     <div class="card-body">
                         <table class="table text-center">
                             <tbody>
-                                <tr data-date="{{\Carbon\Carbon::now()->format('Y-m-d')}}">
+                                <tr data-date="{{ Helpers::userTimeCurrent('Y-m-d') }}">
                                     @foreach($child->privilegeStatus as $date => $privileges)
                                         @foreach($privileges as $name => $privilege)
                                             <td class="{{$privilege ? 'table-danger' : 'table-success'}} managePrivilege">

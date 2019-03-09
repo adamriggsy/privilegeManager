@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->text('privileges');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('timezone')->default('US/Mountain');
             $table->rememberToken();
             $table->timestamps();
         });

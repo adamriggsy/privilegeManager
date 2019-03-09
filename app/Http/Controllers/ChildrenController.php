@@ -20,11 +20,25 @@ class ChildrenController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $id = \Route::current()->parameter('id');
+        if(! \App::runningInConsole()){
+            if(!is_null(\Route::current()->parameter('id'))){
+                $id = (int) \Route::current()->parameter('id');
+            }else if(!is_null(\Route::current()->parameter('child'))){
+                $id = (int) \Route::current()->parameter('child');
+            }else{
+                $id = 10;
+            }
+        }else{
+            $id = 1;
+        }
+
+        //dd($id, \Route::current()->parameter('id'), \Route::current()->parameter('child'));
+
         $this->child = Child::find($id);
         //get the available privileges for the child
-        $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->user->privileges)->get();
-
+        $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
+        $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->privileges)->get();
+        //dd($this->childAvailPrivileges, $this->child->user->privileges, $this->child->privileges);
         //dd($this->childAvailPrivileges);
     }
 
@@ -80,6 +94,7 @@ class ChildrenController extends Controller
      */
     public function edit(Child $child)
     {
+        return view('child-edit')->with('child', $child);
         dd($child);
     }
 
@@ -126,7 +141,7 @@ class ChildrenController extends Controller
         return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges);
     }
 
-    public function childPrivilegesAPI($childID, Request $request){
+    public function childPrivilegesAJAX($childID, Request $request){
         if(self::isUserChild($childID) !== false){
             $requestVars = $request->all();
             $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
@@ -219,6 +234,15 @@ class ChildrenController extends Controller
             }
             return redirect()->route('child.manage', ['id' => $this->child->id]);
         }
+    }
+
+    public function childPrivilegesUpdate(\Request $request){
+        $privileges = $request::input('privileges');
+
+        $this->child->privileges = $privileges;
+        $wasSaved = $this->child->save();
+
+        return response()->json($wasSaved);
     }
 
     public static function isUserChild($childID){

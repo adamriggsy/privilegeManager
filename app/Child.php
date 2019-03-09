@@ -13,6 +13,26 @@ class Child extends Model
         'privileges' => 'array'
     ];
 
+    protected $appends = ['start_ban'];
+
+    /**
+     * Set attribute to date format
+     * @param $input
+     */
+    public function setStartBanAttribute($input)
+    {
+        $this->attributes['start_ban'] =
+            \Timezone::convertToUTC($input, auth()->user()->timezone, 'Y-m-d');
+    }
+
+    /**
+     * Set attribute to date format
+     * @param $input
+     */
+    public function getStartBanAttribute($input)
+    {
+        return \Timezone::convertFromUTC($input, auth()->user()->timezone, 'Y-m-d');
+    }
 
     public function user()
     {

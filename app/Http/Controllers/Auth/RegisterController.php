@@ -67,6 +67,17 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'timezone' => $data['timezone'],
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $timezone_select = \Timezone::selectForm(
+            'US/Mountain', 
+            '', 
+            ['class' => 'form-control', 'name' => 'timezone']
+        );
+        return view('auth.register', compact('timezone_select'));
     }
 }
