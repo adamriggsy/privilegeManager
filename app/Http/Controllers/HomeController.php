@@ -38,11 +38,15 @@ class HomeController extends Controller
     {
         $children = User::find(\Auth::id())->children;
         $allPrivileges = Privilege::all('name')->toArray();
+        $now = Helpers::userTimeCurrent();
+
+        $dateRange = Helpers::parseDateRange($now, $now);
 
         $privilegeStatus = [];
 
         foreach ($children as $key => $child) {
-            $child = Child::setPrivilegeStatus($child, $allPrivileges);;
+            $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);;
+            $child->privilegeStatus = $child->privilegeStatus[$now];
         }
 
         return view('children-status')->withChildren($children)->withAvailablePrivileges($allPrivileges);

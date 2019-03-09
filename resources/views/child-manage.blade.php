@@ -69,8 +69,27 @@
             
             if(isBanned == 'danger'){
                 $("#bannedPrivilege").modal('toggle').data({'date' : theDate, 'privilege' : privilegeName});
+                var dateNew = moment(theDate);
+                
+                $("#bannedPrivilege #datepicker_start_restore").datepicker('setDate', dateNew.format('YYYY-MM-DD'));
+                $("#bannedPrivilege #datepicker_end_restore").datepicker('setDate', dateNew.format('YYYY-MM-DD'));
+                
+                $("#bannedPrivilege select[name='privilege'] option").each(function() {
+                    //may want to use $.trim in here
+                    this.selected = (this.text == privilegeName);
+                });
             }else{
                 $("#earnedPrivilege").modal('toggle').data({'date' : theDate, 'privilege' : privilegeName});
+                
+                var dateNew = moment(theDate);
+                
+                $("#earnedPrivilege #datepicker_start_ban").datepicker('setDate', dateNew.format('YYYY-MM-DD'));
+                $("#earnedPrivilege #datepicker_end_ban").datepicker('setDate', dateNew.format('YYYY-MM-DD'));
+                
+                $("#earnedPrivilege select[name='privilege'] option").each(function() {
+                    //may want to use $.trim in here
+                    this.selected = (this.text == privilegeName);
+                });
             }
         });
 
@@ -143,40 +162,7 @@
     </div>
 
 
-    <div id="bannedPrivilege" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Do you want to restore this privilege?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class='btn-group btn-group-lg'>
-                        <button id="bannedSubmit" type="button" class="btn btn-primary">Yes</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="earnedPrivilege" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Do you want to take away this privilege?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class='btn-group btn-group-lg'>
-                        <button id="earnedSubmit" type="button" class="btn btn-primary">Yes</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('includes.child.privilege-manager-restore')
+    @include('includes.child.privilege-manager-ban')
+    @include('includes.child.privilegeManageJS')
 @endsection
