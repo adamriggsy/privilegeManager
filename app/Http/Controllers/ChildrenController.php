@@ -19,7 +19,6 @@ class ChildrenController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
         if(! \App::runningInConsole()){
             if(!is_null(\Route::current()->parameter('id'))){
                 $id = (int) \Route::current()->parameter('id');

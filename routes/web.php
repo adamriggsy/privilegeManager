@@ -19,25 +19,30 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatus');
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatus');
 
-Route::get('/child/{id}/manage', 'ChildrenController@managePrivileges')->name('child.manage');
-Route::get('/child/{id}/privilege/ban', 'ChildrenController@banPrivilege')->name('child.privilege.ban');
-Route::post('/child/{id}/privilege/ban', 'ChildrenController@banPrivilegeProcess')->name('child.privilege.ban.process');
-Route::get('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilege')->name('child.privilege.restore');
-Route::post('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilegeProcess')->name('child.privilege.restore.process');
+	Route::get('/child/{id}/manage', 'ChildrenController@managePrivileges')->name('child.manage');
+	Route::get('/child/{id}/privilege/ban', 'ChildrenController@banPrivilege')->name('child.privilege.ban');
+	Route::post('/child/{id}/privilege/ban', 'ChildrenController@banPrivilegeProcess')->name('child.privilege.ban.process');
+	Route::get('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilege')->name('child.privilege.restore');
+	Route::post('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilegeProcess')->name('child.privilege.restore.process');
+	Route::get('user/privileges', function(){
+		return redirect()->route('user.index');
+	});
 
-Route::get('user/privileges', function(){
-	return redirect()->route('user.index');
+	Route::resource('child', 'ChildrenController');
+	Route::resource('user/privileges', 'PrivilegeController')->except([
+	    'index', 'show', 'edit'
+	]);
+	Route::resource('user', 'UserController')->except([
+	    'create', 'destroy'
+	]);
 });
 
-Route::resource('child', 'ChildrenController');
-Route::resource('user/privileges', 'PrivilegeController')->except([
-    'index', 'show', 'edit'
-]);
-Route::resource('user', 'UserController')->except([
-    'create', 'destroy'
-]);
+
+
+
 
 // Route::get('/ajax/child-privilege-feed/{id}', 'ChildrenController@childPrivilegesAJAX')->name('childPrivilegeFeed');
 Route::get('/ajax/nl/child-privilege-feed/{id}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
