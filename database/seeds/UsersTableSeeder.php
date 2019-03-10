@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('Sophie2006*'),
                 'api_token' => Str::random(60),
                 'timezone' => 'US/Mountain',
-                'privileges' => '[1,2]',
+                'my_privileges' => '[1,2]',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('Sophie2006*'),
                 'api_token' => Str::random(60),
                 'timezone' => 'US/Mountain',
-                'privileges' => '[1,2,3]',
+                'my_privileges' => '[1,2,3]',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]

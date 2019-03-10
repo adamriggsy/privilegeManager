@@ -37,8 +37,8 @@ class ChildrenController extends Controller
         $this->child = Child::find($id);
         //get the available privileges for the child
         $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
-        $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->privileges)->get();
-        //dd($this->childAvailPrivileges, $this->child->user->privileges, $this->child->privileges);
+        $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
+        //dd($this->childAvailPrivileges, $this->child->user->my_privileges, $this->child->privileges);
         //dd($this->childAvailPrivileges);
     }
 

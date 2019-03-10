@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use App\Privilege;
 
 class PrivilegeController extends Controller
 {
@@ -13,7 +15,7 @@ class PrivilegeController extends Controller
      */
     public function index()
     {
-        //
+        // Is automatically redirected to the user home page
     }
 
     /**
@@ -23,7 +25,10 @@ class PrivilegeController extends Controller
      */
     public function create()
     {
-        //
+        $user = User::find(\Auth::id());
+
+        return view('privilege-create')->with('user', $user);
+        dd($user);
     }
 
     /**
@@ -34,30 +39,27 @@ class PrivilegeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $privilege = new Privilege;
+
+        $privilege->name = $request->get('privilegeName');
+
+        if($privilege->save()){
+            $user = User::find(\Auth::id());
+            $myPrivileges = $user->my_privileges;
+            array_push($myPrivileges, $privilege->id);
+
+            $user->my_privileges = $myPrivileges;
+            $user->save();
+            
+            $request->session()->flash('status', 'You have successfully added a new privilege');
+        }else{
+            $request->session()->flash('error', 'Could not create the privilege');
+        }
+
+        
+        return redirect()->route('privileges.create');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

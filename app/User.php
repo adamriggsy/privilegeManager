@@ -37,7 +37,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'privileges' => 'array',
+        'my_privileges' => 'array',
     ];
 
 
@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function privileges()
     {
-        return Privilege::whereIn('id', $this->privileges)->get();
+        return Privilege::whereIn('id', $this->my_privileges)->get();
     }
 }

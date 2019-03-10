@@ -22,6 +22,9 @@
                             {{$privilege->name}}<br>
                         @endforeach
                     </p>
+                    <p>
+                        <a href="{{route('privileges.create')}}">Add Privilege</a>
+                    </p>
 
                 </div>
             </div>

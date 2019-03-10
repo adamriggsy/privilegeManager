@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->text('privileges');
+            $table->text('my_privileges');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('timezone')->default('US/Mountain');

@@ -27,16 +27,20 @@ Route::post('/child/{id}/privilege/ban', 'ChildrenController@banPrivilegeProcess
 Route::get('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilege')->name('child.privilege.restore');
 Route::post('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilegeProcess')->name('child.privilege.restore.process');
 
+Route::get('user/privileges', function(){
+	return redirect()->route('user.index');
+});
+
 Route::resource('child', 'ChildrenController');
+Route::resource('user/privileges', 'PrivilegeController')->except([
+    'index', 'show', 'edit'
+]);
 Route::resource('user', 'UserController')->except([
     'create', 'destroy'
 ]);
-Route::resource('privileges', 'PrivilegeController')->except([
-    'index'
-]);;
 
 // Route::get('/ajax/child-privilege-feed/{id}', 'ChildrenController@childPrivilegesAJAX')->name('childPrivilegeFeed');
-// Route::get('/ajax/nl/child-privilege-feed/{id}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
+Route::get('/ajax/nl/child-privilege-feed/{id}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
 
 Route::post('/ajax/child-privilege/{id}/update', 'ChildrenController@childPrivilegesUpdate')->name('childPrivilegeUpdate');
 
