@@ -141,22 +141,22 @@ class ChildrenController extends Controller
         return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges);
     }
 
-    public function childPrivilegesAJAX($childID, Request $request){
-        if(self::isUserChild($childID) !== false){
-            $requestVars = $request->all();
-            $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
+    // public function childPrivilegesAJAX($childID, Request $request){
+    //     if(self::isUserChild($childID) !== false){
+    //         $requestVars = $request->all();
+    //         $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
             
-            $allPrivileges = $this->childAvailPrivileges;
+    //         $allPrivileges = $this->childAvailPrivileges;
 
-            $child = Child::setPrivilegeStatus($this->child, $allPrivileges, $dateRange);
+    //         $child = Child::setPrivilegeStatus($this->child, $allPrivileges, $dateRange);
 
-            $privilegeEvents = Child::privilegeEvents($child->privilegeStatus);
+    //         $privilegeEvents = Child::privilegeEvents($child->privilegeStatus);
             
-            return response()->json($privilegeEvents);
-        }else{
-            return response()->json([]);
-        }
-    }
+    //         return response()->json($privilegeEvents);
+    //     }else{
+    //         return response()->json([]);
+    //     }
+    // }
 
     public function banPrivilege($childID, Request $request){
         if(self::isUserChild($childID) !== false){

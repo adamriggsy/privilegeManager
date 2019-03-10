@@ -54,7 +54,8 @@ class HomeController extends Controller
     }
 
     public function childPrivilegesAPI($childID, Request $request){
-        $user = User::find(1);
+        $user = \Auth::guard('api')->user();
+
         $child = Child::find($childID);
         $requestVars = $request->all();
         $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
