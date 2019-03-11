@@ -35,6 +35,7 @@
         $(document).ready(function() {
             var calendar = $('#calendar').fullCalendar({
                 defaultView: 'listWeek',
+                firstDay: 1,
                 events: {
                     url: '{{route('childPrivilegeFeed', ['id' => $child->id])}}',
                     type: 'GET', // Send post data
