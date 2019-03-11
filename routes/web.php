@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 // Route::get('/ajax/child-privilege-feed/{id}', 'ChildrenController@childPrivilegesAJAX')->name('childPrivilegeFeed');
-Route::get('/ajax/nl/child-privilege-feed/{id}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
+//Route::get('/ajax/nl/child-privilege-feed/{id}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
 
 Route::post('/ajax/child-privilege/{id}/update', 'ChildrenController@childPrivilegesUpdate')->name('childPrivilegeUpdate');
 
