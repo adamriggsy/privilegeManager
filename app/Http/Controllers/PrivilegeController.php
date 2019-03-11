@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Privilege;
+use App\Http\Controllers\BaseController;
 
-class PrivilegeController extends Controller
+class PrivilegeController extends BaseController
 {
     /**
      * Display a listing of the resource.

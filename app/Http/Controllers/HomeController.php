@@ -7,17 +7,19 @@ use App\Child;
 use App\User;
 use App\Privilege;
 use App\Http\Controllers\ChidrenController;
+use App\Http\Controllers\BaseController;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         //$this->middleware('auth');
+        parent::__construct($request);
     }
 
     /**
@@ -37,7 +39,8 @@ class HomeController extends Controller
      */
     public function childrenStatus()
     {
-        $children = User::find(\Auth::id())->children;
+        //$children = User::find(\Auth::id())->children;
+        $children = User::find(1)->children;
         $allPrivileges = Privilege::all('name')->toArray();
         $now = Helpers::userTimeCurrent();
 
@@ -50,7 +53,55 @@ class HomeController extends Controller
             $child->privilegeStatus = $child->privilegeStatus[$now];
         }
 
-        return view('children-status')->withChildren($children)->withAvailablePrivileges($allPrivileges);
+        if($this->jsonRequest){
+            $jsonReturn = [
+                '$jason' => [
+                    'head' => [
+                        'title' => 'Children Status',
+                        'description' => 'Quickly see the status of your children\'s privileges' ,
+                        'icon' => '',
+                        'offline' => 'true',
+                        'styles' => [
+                        ],
+                        'actions' => [
+                        ],
+                        'templates' => [
+                        ],
+                        'data' => [
+                        ]
+                    ],
+                    'body' => [
+                        'header' => [
+                            "title" => "Privilege Manager",
+                            'menu' => [
+                                'text' => 'menu',
+                                'style' => [
+                                    'color' => '#0000ff',
+                                    'font' => 'HelveticaNeue-Bold',
+                                    'size' => '17'
+                                ],
+                                'action' => [
+                                    'type' => '$util.toast',
+                                    'options' => [
+                                        'text' => 'Good Job!'
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'sections' => [
+                            [
+                                'type' => 'label',
+                                'text' => 'Testing yes'
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+            return response()->json($jsonReturn);
+            dd($this->jsonRequest, json_encode($jsonReturn));
+        }else{
+            return view('children-status')->withChildren($children)->withAvailablePrivileges($allPrivileges);
+        }
     }
 
     public function childPrivilegesAPI($childID, Request $request){

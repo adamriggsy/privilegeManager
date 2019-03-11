@@ -7,8 +7,9 @@ use App\Child;
 use App\User;
 use App\Privilege;
 use Carbon\Carbon;
+use App\Http\Controllers\BaseController;
 
-class ChildrenController extends Controller
+class ChildrenController extends BaseController
 {
     public $child = null;
     public $childAvailPrivileges = null;
@@ -17,8 +18,10 @@ class ChildrenController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
+        parent::__construct($request);
+    
         if(! \App::runningInConsole()){
             if(!is_null(\Route::current()->parameter('id'))){
                 $id = (int) \Route::current()->parameter('id');

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Http\Controllers\BaseController;
 
-class Helpers extends Controller
+class Helpers extends BaseController
 {
     public static function parseDateRange($startDate, $endDate){
     	return \Carbon\CarbonPeriod::create($startDate, $endDate)->toArray();
