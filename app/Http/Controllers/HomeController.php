@@ -49,11 +49,54 @@ class HomeController extends BaseController
         $privilegeStatus = [];
 
         foreach ($children as $key => $child) {
-            $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);;
+            $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
             $child->privilegeStatus = $child->privilegeStatus[$now];
         }
 
         if($this->jsonRequest){
+            // $childrenComponents = [
+            //     [
+            //         'type' => 'label',
+            //         'text' => $now
+            //     ]
+            // ];
+
+            foreach($children as $child){
+                $childInfo = [];
+                $childInfo[] = [
+                    'type' => 'label',
+                    'text' => $child->name,
+                    'style' => [
+                        'padding' => 20,
+                        'align' => 'center',
+                        'size' => '18'
+                    ]
+                ];
+
+                foreach($child->privilegeStatus as $name => $status){
+                    $statusText = $name . ' - ';
+                    $statusText .= $status ? 'no' : 'yes';
+                    $statusColor = $status ? '#f5c6cb' : '#c3e6cb';
+
+                    $childInfo[] = [
+                        'type' => 'label',
+                        'text' => $name,
+                        'style' => [
+                            'background' => $statusColor,
+                            'padding' => '10',
+                        ]
+                    ];
+                }
+
+                $childComponent = [
+                    'type' => 'vertical',
+                    'components' => $childInfo
+                ];
+                
+                $childrenComponents[] = $childComponent;
+            }
+
+            
             $jsonReturn = [
                 '$jason' => [
                     'head' => [
@@ -64,6 +107,9 @@ class HomeController extends BaseController
                         'styles' => [
                         ],
                         'actions' => [
+                            '$pull' => [
+                                "type" => '$reload'
+                            ]
                         ],
                         'templates' => [
                         ],
@@ -72,31 +118,31 @@ class HomeController extends BaseController
                     ],
                     'body' => [
                         'header' => [
-                            "title" => "Privilege Manager",
-                            'menu' => [
-                                'text' => 'menu',
-                                'style' => [
-                                    'color' => '#0000ff',
-                                    'font' => 'HelveticaNeue-Bold',
-                                    'size' => '17'
-                                ],
-                                'action' => [
-                                    'type' => '$util.toast',
-                                    'options' => [
-                                        'text' => 'Good Job!'
-                                    ]
-                                ]
-                            ]
+                            "title" => "Children Status - " . $now,
+                            // 'menu' => [
+                            //     'text' => 'menu',
+                            //     'style' => [
+                            //         'color' => '#0000ff',
+                            //         'font' => 'HelveticaNeue-Bold',
+                            //         'size' => '17'
+                            //     ],
+                            //     'action' => [
+                            //         'type' => '$util.toast',
+                            //         'options' => [
+                            //             'text' => 'Good Job!'
+                            //         ]
+                            //     ]
+                            // ]
                         ],
                         'sections' => [
                             [
-                                'type' => 'label',
-                                'text' => 'Testing yes'
+                                'items' => $childrenComponents
                             ]
                         ]
                     ]
                 ]
             ];
+
             return response()->json($jsonReturn);
             dd($this->jsonRequest, json_encode($jsonReturn));
         }else{
