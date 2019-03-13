@@ -247,27 +247,37 @@ class HomeController extends BaseController
                                     'action' => array(
                                         'type' => '$network.request',
                                         'options' => array(
-                                            'url' => 'ROOT/users/sign_in.json',
+                                            'url' => 'http://manage.riggsdesignsolutions.com/json/login',
                                             'method' => 'post',
                                             'data' => array(
-                                                'user[email]' => '{{$get.email}}',
-                                                'user[password]' => '{{$get.password}}',
+                                                'email' => '{{$get.email}}',
+                                                'password' => '{{$get.password}}',
                                             ) ,
                                         ) ,
                                         'success' => array(
-                                            'type' => '$session.set',
+                                            'type' => '$util.banner',
                                             'options' => array(
-                                                'domain' => 'ROOT',
-                                                'header' => array(
-                                                    'X-User-Email' => '{{$jason.email}}',
-                                                    'X-User-Token' => '{{$jason.authentication_token}}',
-                                                ) ,
+                                                'title' => 'Success',
+                                                'description' => 'You have sent a request and received a success message: {{$jason.email}  -  {{$jason.authentication_token}',
                                             ) ,
+                                            // 'type' => '$session.set',
+                                            // 'options' => array(
+                                            //     'domain' => 'http://manage.riggsdesignsolutions.com',
+                                            //     'header' => array(
+                                            //         'X-User-Email' => '{{$jason.email}}',
+                                            //         'X-User-Token' => '{{$jason.authentication_token}}',
+                                            //     ) ,
+                                            // ) ,
                                             'success' => array(
-                                                'type' => '$href',
+                                                // 'type' => '$href',
+                                                // 'options' => array(
+                                                //     'url' => 'ROOT/posts.json',
+                                                //     'transition' => 'replace',
+                                                // ) ,
+                                                'type' => '$util.banner',
                                                 'options' => array(
-                                                    'url' => 'ROOT/posts.json',
-                                                    'transition' => 'replace',
+                                                    'title' => 'Success',
+                                                    'description' => 'You have sent a request and received a success(2)',
                                                 ) ,
                                             ) ,
                                         ) ,
@@ -290,58 +300,24 @@ class HomeController extends BaseController
                                         'align' => 'center',
                                     ) ,
                                 ) ,
-                                7 => array(
-                                    'type' => 'label',
-                                    'text' => 'Sign up >',
-                                    'style' => array(
-                                        'align' => 'right',
-                                        'size' => '20',
-                                        'padding' => '10',
-                                        'font' => 'HelveticaNeue-Bold',
-                                        'color' => '#ffffff',
-                                    ) ,
-                                    'action' => array(
-                                        'type' => '$network.request',
-                                        'options' => array(
-                                            'url' => 'ROOT/users.json',
-                                            'method' => 'post',
-                                            'data' => array(
-                                                'user[email]' => '{{$get.email}}',
-                                                'user[password]' => '{{$get.password}}',
-                                            ) ,
-                                        ) ,
-                                        'success' => array(
-                                            'type' => '$session.set',
-                                            'options' => array(
-                                                'domain' => 'ROOT',
-                                                'header' => array(
-                                                    'X-User-Email' => '{{$jason.email}}',
-                                                    'X-User-Token' => '{{$jason.authentication_token}}',
-                                                ) ,
-                                            ) ,
-                                            'success' => array(
-                                                'type' => '$href',
-                                                'options' => array(
-                                                    'url' => 'ROOT/posts.json',
-                                                    'transition' => 'replace',
-                                                ) ,
-                                            ) ,
-                                        ) ,
-                                        'error' => array(
-                                            'type' => '$util.banner',
-                                            'options' => array(
-                                                'title' => 'Enter credentials',
-                                                'description' => 'Please enter both email and password',
-                                            ) ,
-                                        ) ,
-                                    ) ,
-                                ) ,
                             ) ,
                         ) ,
                     ) ,
                 ) ,
             )
         );
+
+        return response()->json($jsonReturn);
+    }
+
+    public function handleJsonLogin(Request $request){
+        $input = $request->all();
+
+        $jsonReturn = [
+            "id" => 1,
+            "email" => $input['email'],
+            "authentication_token" => "testAuthenticationToken" . rand()
+        ];
 
         return response()->json($jsonReturn);
     }
