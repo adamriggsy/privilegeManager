@@ -54,12 +54,17 @@ class HomeController extends BaseController
         }
 
         if($this->jsonRequest){
-            // $childrenComponents = [
-            //     [
-            //         'type' => 'label',
-            //         'text' => $now
-            //     ]
-            // ];
+            $childrenComponents = [
+                [
+                    'type' => 'label',
+                    'text' => "Last updated: " . Helpers::userTimeCurrent('m-d-Y H:i:s'),
+                    'style' => [
+                        'align' => 'center'
+                    ]
+                ]
+            ];
+
+            $childrenOnly = [];
 
             foreach($children as $child){
                 $childInfo = [];
@@ -94,6 +99,7 @@ class HomeController extends BaseController
                 ];
                 
                 $childrenComponents[] = $childComponent;
+                $childrenOnly[] = $child->toArray();
             }
 
             
@@ -114,6 +120,7 @@ class HomeController extends BaseController
                         'templates' => [
                         ],
                         'data' => [
+                            'children' => $childrenOnly 
                         ]
                     ],
                     'body' => [
