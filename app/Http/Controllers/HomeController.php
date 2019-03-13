@@ -173,4 +173,176 @@ class HomeController extends BaseController
         
         return response()->json($privilegeEvents);
     }
+
+    public function jsonLogin(Request $request){
+        $jsonReturn = array(
+            '$jason' => array(
+                'head' => array(
+                    'title' => 'login',
+                ) ,
+                'body' => array(
+                    'style' => array(
+                        'border' => 'none',
+                        'background' => '#646464',
+                    ) ,
+                    'header' => array(
+                        'title' => 'Sign in',
+                        'style' => array(
+                            'background' => '#646464',
+                            'color' => '#ffffff',
+                        ) ,
+                    ) ,
+                    'sections' => array(
+                        0 => array(
+                            'items' => array(
+                                0 => array(
+                                    'type' => 'space',
+                                    'height' => '10',
+                                ) ,
+                                1 => array(
+                                    'type' => 'textfield',
+                                    'name' => 'email',
+                                    'style' => array(
+                                        'size' => '20',
+                                        'color' => '#8bb92d',
+                                        'font' => 'HelveticaNeue-Bold',
+                                        'background' => '#575757',
+                                        'padding' => '20',
+                                    ) ,
+                                    'placeholder' => 'enter email',
+                                ) ,
+                                2 => array(
+                                    'type' => 'space',
+                                    'height' => '5',
+                                ) ,
+                                3 => array(
+                                    'type' => 'textfield',
+                                    'name' => 'password',
+                                    'placeholder' => 'enter password',
+                                    'style' => array(
+                                        'size' => '20',
+                                        'color' => '#8bb92d',
+                                        'font' => 'HelveticaNeue-Bold',
+                                        'background' => '#575757',
+                                        'padding' => '20',
+                                        'secure' => 'true',
+                                    ) ,
+                                ) ,
+                                4 => array(
+                                    'type' => 'space',
+                                    'height' => '5',
+                                ) ,
+                                5 => array(
+                                    'type' => 'label',
+                                    'style' => array(
+                                        'width' => '100%',
+                                        'align' => 'right',
+                                        'font' => 'HelveticaNeue-Bold',
+                                        'size' => '20',
+                                        'padding' => '10',
+                                        'background' => '#8bb92d',
+                                        'color' => '#ffffff',
+                                    ) ,
+                                    'text' => 'Sign in >',
+                                    'action' => array(
+                                        'type' => '$network.request',
+                                        'options' => array(
+                                            'url' => 'ROOT/users/sign_in.json',
+                                            'method' => 'post',
+                                            'data' => array(
+                                                'user[email]' => '{{$get.email}}',
+                                                'user[password]' => '{{$get.password}}',
+                                            ) ,
+                                        ) ,
+                                        'success' => array(
+                                            'type' => '$session.set',
+                                            'options' => array(
+                                                'domain' => 'ROOT',
+                                                'header' => array(
+                                                    'X-User-Email' => '{{$jason.email}}',
+                                                    'X-User-Token' => '{{$jason.authentication_token}}',
+                                                ) ,
+                                            ) ,
+                                            'success' => array(
+                                                'type' => '$href',
+                                                'options' => array(
+                                                    'url' => 'ROOT/posts.json',
+                                                    'transition' => 'replace',
+                                                ) ,
+                                            ) ,
+                                        ) ,
+                                        'error' => array(
+                                            'type' => '$util.banner',
+                                            'options' => array(
+                                                'title' => 'Error',
+                                                'description' => 'Something went wrong. Please check if you entered your email and password correctly',
+                                            ) ,
+                                        ) ,
+                                    ) ,
+                                ) ,
+                                6 => array(
+                                    'type' => 'label',
+                                    'style' => array(
+                                        'size' => '16',
+                                        'font' => 'HelveticaNeue-Bold',
+                                        'text' => 'or',
+                                        'padding' => '10',
+                                        'align' => 'center',
+                                    ) ,
+                                ) ,
+                                7 => array(
+                                    'type' => 'label',
+                                    'text' => 'Sign up >',
+                                    'style' => array(
+                                        'align' => 'right',
+                                        'size' => '20',
+                                        'padding' => '10',
+                                        'font' => 'HelveticaNeue-Bold',
+                                        'color' => '#ffffff',
+                                    ) ,
+                                    'action' => array(
+                                        'type' => '$network.request',
+                                        'options' => array(
+                                            'url' => 'ROOT/users.json',
+                                            'method' => 'post',
+                                            'data' => array(
+                                                'user[email]' => '{{$get.email}}',
+                                                'user[password]' => '{{$get.password}}',
+                                            ) ,
+                                        ) ,
+                                        'success' => array(
+                                            'type' => '$session.set',
+                                            'options' => array(
+                                                'domain' => 'ROOT',
+                                                'header' => array(
+                                                    'X-User-Email' => '{{$jason.email}}',
+                                                    'X-User-Token' => '{{$jason.authentication_token}}',
+                                                ) ,
+                                            ) ,
+                                            'success' => array(
+                                                'type' => '$href',
+                                                'options' => array(
+                                                    'url' => 'ROOT/posts.json',
+                                                    'transition' => 'replace',
+                                                ) ,
+                                            ) ,
+                                        ) ,
+                                        'error' => array(
+                                            'type' => '$util.banner',
+                                            'options' => array(
+                                                'title' => 'Enter credentials',
+                                                'description' => 'Please enter both email and password',
+                                            ) ,
+                                        ) ,
+                                    ) ,
+                                ) ,
+                            ) ,
+                        ) ,
+                    ) ,
+                ) ,
+            )
+        );
+
+        return response()->json($jsonReturn);
+    }
 }
