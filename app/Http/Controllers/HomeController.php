@@ -270,16 +270,16 @@ class HomeController extends BaseController
                                                 ) ,
                                             ) ,
                                             'success' => array(
-                                                // 'type' => '$href',
-                                                // 'options' => array(
-                                                //     'url' => 'ROOT/posts.json',
-                                                //     'transition' => 'replace',
-                                                // ) ,
-                                                'type' => '$util.banner',
+                                                'type' => '$href',
                                                 'options' => array(
-                                                    'title' => 'Authentication saved to Session',
-                                                    'description' => '{{session.}}',
+                                                    'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
+                                                    'transition' => 'replace',
                                                 ) ,
+                                                // 'type' => '$util.banner',
+                                                // 'options' => array(
+                                                //     'title' => 'Authentication saved to Session',
+                                                //     'description' => '{{session.}}',
+                                                // ) ,
                                             ) ,
                                         ) ,
                                         'error' => array(
