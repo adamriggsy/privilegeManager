@@ -255,19 +255,20 @@ class HomeController extends BaseController
                                             ) ,
                                         ) ,
                                         'success' => array(
-                                            'type' => '$util.banner',
-                                            'options' => array(
-                                                'title' => 'Success',
-                                                'description' => 'You have sent a request and received a success message: {{$jason.email}  -  {{$jason.authentication_token}',
-                                            ) ,
-                                            // 'type' => '$session.set',
+                                            // 'type' => '$util.banner',
                                             // 'options' => array(
-                                            //     'domain' => 'http://manage.riggsdesignsolutions.com',
-                                            //     'header' => array(
-                                            //         'X-User-Email' => '{{$jason.email}}',
-                                            //         'X-User-Token' => '{{$jason.authentication_token}}',
-                                            //     ) ,
+                                            //     'title' => 'Success - {{$jason.email}}',
+                                            //     'description' => '{{$jason.authentication_token}}',
                                             // ) ,
+                                            'type' => '$session.set',
+                                            'options' => array(
+                                                'domain' => 'http://manage.riggsdesignsolutions.com',
+                                                'header' => array(
+                                                    'X-User-Email' => '{{$jason.email}}',
+                                                    'X-User-Token' => '{{$jason.authentication_token}}',
+                                                    'Authorization' => 'Bearer {{$jason.authentication_token}}'
+                                                ) ,
+                                            ) ,
                                             'success' => array(
                                                 // 'type' => '$href',
                                                 // 'options' => array(
@@ -276,8 +277,8 @@ class HomeController extends BaseController
                                                 // ) ,
                                                 'type' => '$util.banner',
                                                 'options' => array(
-                                                    'title' => 'Success',
-                                                    'description' => 'You have sent a request and received a success(2)',
+                                                    'title' => 'Authentication saved to Session',
+                                                    'description' => '{{session.}}',
                                                 ) ,
                                             ) ,
                                         ) ,
@@ -312,13 +313,29 @@ class HomeController extends BaseController
 
     public function handleJsonLogin(Request $request){
         $input = $request->all();
+        $error = false;
 
-        $jsonReturn = [
-            "id" => 1,
-            "email" => $input['email'],
-            "authentication_token" => "testAuthenticationToken" . rand()
-        ];
+        if( (isset($input['email']) &&  !empty($input['email'])) && (isset($input['password']) &&  !empty($input['password'])) ){
+            
+            if (\Auth::attempt(['email' => $input['email'], 'password' => $input['password']])){
+                $user = User::find(\Auth::id());
+            }else{
+                $error = true;
+            }
+        }else{
+            $error = true;
+        }
 
-        return response()->json($jsonReturn);
+        if($error){
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }else{
+            $jsonReturn = [
+                "id" => $user->id,
+                "email" => $user->email,
+                "authentication_token" => $user->api_token
+            ];
+
+            return response()->json($jsonReturn);
+        }
     }
 }

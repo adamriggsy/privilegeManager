@@ -42,7 +42,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 Route::prefix('json')->group(function () {
-	Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
 	Route::get('/login', 'HomeController@jsonLogin')->name('loginJSON');
 	Route::post('/login', 'HomeController@handleJsonLogin')->name('handleJsonLogin');
 });

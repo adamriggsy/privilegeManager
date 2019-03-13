@@ -18,3 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->get('/child-privilege-feed/{childID}', 'HomeController@childPrivilegesAPI')->name('childPrivilegeFeed');
+
+Route::middleware('auth:api')->prefix('json')->group(function () {
+	Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
+});

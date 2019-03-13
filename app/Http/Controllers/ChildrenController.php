@@ -30,18 +30,14 @@ class ChildrenController extends BaseController
             }else{
                 $id = 10;
             }
+
+            $this->child = Child::find($id);
+            //get the available privileges for the child
+            $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
+            $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
         }else{
             $id = 1;
         }
-
-        //dd($id, \Route::current()->parameter('id'), \Route::current()->parameter('child'));
-
-        $this->child = Child::find($id);
-        //get the available privileges for the child
-        $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
-        $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
-        //dd($this->childAvailPrivileges, $this->child->user->my_privileges, $this->child->privileges);
-        //dd($this->childAvailPrivileges);
     }
 
     /**
