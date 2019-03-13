@@ -49,7 +49,8 @@ class HomeController extends BaseController
         $privilegeStatus = [];
 
         foreach ($children as $key => $child) {
-            $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
+            $childAvailPrivileges = Privilege::whereIn('id', $child->privileges)->get();
+            $child = Child::setPrivilegeStatus($child, $childAvailPrivileges, $dateRange);
             $child->privilegeStatus = $child->privilegeStatus[$now];
         }
 
@@ -164,9 +165,9 @@ class HomeController extends BaseController
         $requestVars = $request->all();
         $dateRange = Helpers::parseDateRange($requestVars['start'], $requestVars['end']);
         
-        $allPrivileges = Privilege::whereIn('id', $child->privileges)->get();
+        $childAvailPrivileges = Privilege::whereIn('id', $child->privileges)->get();
 
-        $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
+        $child = Child::setPrivilegeStatus($child, $childAvailPrivileges, $dateRange);
 
         $privilegeEvents = Child::privilegeEvents($child->privilegeStatus);
         

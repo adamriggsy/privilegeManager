@@ -81,6 +81,7 @@ class Child extends Model
         }
         
         foreach($dateRange as $day){
+            //All Privileges is set by the function call. Can be all privileges or specific to the child.
             foreach($allPrivileges as $privilege){
                 //set the privilege status for each day
                 $privilegeStatus[$privilege['name']] = false;
@@ -92,7 +93,7 @@ class Child extends Model
             }
             $days[$day->format('Y-m-d')] = $privilegeStatus;
         }
-
+        
         $child->privilegeStatus = $days;
         
         return $child;
