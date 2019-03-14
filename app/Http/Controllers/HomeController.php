@@ -126,8 +126,6 @@ class HomeController extends BaseController
             ];
             
 
-            dd($jsonReturn, $jsonReturnOriginal);
-
             return response()->json($jsonReturn);
             dd($this->jsonRequest, json_encode($jsonReturn));
         }else{
