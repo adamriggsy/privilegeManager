@@ -17,6 +17,10 @@ class Helpers extends BaseController
 	}
 
 	public static function userTimeCurrent($format = 'Y-m-d'){
-		return Carbon::now()->setTimezone(\Auth::user()->timezone)->format($format);
+		if(!is_null(\Auth::user())){
+			return Carbon::now()->setTimezone(\Auth::user()->timezone)->format($format);
+		}else{
+			return Carbon::now()->format($format);
+		}
 	}
 }
