@@ -28,13 +28,15 @@ class ChildrenController extends BaseController
             }else if(!is_null(\Route::current()->parameter('child'))){
                 $id = (int) \Route::current()->parameter('child');
             }else{
-                $id = 10;
+                $id = false;
             }
 
-            $this->child = Child::find($id);
-            //get the available privileges for the child
-            $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
-            $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
+            if($id){
+                $this->child = Child::find($id);
+                //get the available privileges for the child
+                $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
+                $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
+            }
         }else{
             $id = 1;
         }
@@ -70,7 +72,21 @@ class ChildrenController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        $user = User::find(\Auth::id());
+        $child = new Child;
+
+        $child->name = $request->get('childName');
+        $child->birthdate = $request->get('birthdate');
+        $child->privileges = $user->my_privileges;
+
+        if($user->children()->save($child)){
+            $request->session()->flash('status', 'You have successfully added a new child');
+        }else{
+            $request->session()->flash('error', 'Could not create the child');
+        }
+
+        
+        return redirect()->route('child.create');
     }
 
     /**

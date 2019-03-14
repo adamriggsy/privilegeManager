@@ -8,6 +8,7 @@ use App\User;
 use App\Privilege;
 use App\Http\Controllers\ChidrenController;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\AndroidApp;
 use Carbon\Carbon;
 
 class HomeController extends BaseController
@@ -109,53 +110,23 @@ class HomeController extends BaseController
                 $childrenOnly[] = $child->toArray();
             }
 
-            
-            $jsonReturn = [
-                '$jason' => [
-                    'head' => [
-                        'title' => 'Children Status',
-                        'description' => 'Quickly see the status of your children\'s privileges' ,
-                        'icon' => '',
-                        'offline' => 'true',
-                        'styles' => [
-                        ],
-                        'actions' => [
-                            '$pull' => [
-                                "type" => '$reload'
-                            ]
-                        ],
-                        'templates' => [
-                        ],
-                        'data' => [
-                            'children' => $childrenOnly 
-                        ]
-                    ],
-                    'body' => [
-                        'header' => [
-                            "title" => "Children Status - " . $now,
-                            // 'menu' => [
-                            //     'text' => 'menu',
-                            //     'style' => [
-                            //         'color' => '#0000ff',
-                            //         'font' => 'HelveticaNeue-Bold',
-                            //         'size' => '17'
-                            //     ],
-                            //     'action' => [
-                            //         'type' => '$util.toast',
-                            //         'options' => [
-                            //             'text' => 'Good Job!'
-                            //         ]
-                            //     ]
-                            // ]
-                        ],
-                        'sections' => [
-                            [
-                                'items' => $childrenComponents
-                            ]
-                        ]
-                    ]
+            $options = [
+                "title" => "Children Status",
+                "description" => "Quickly see the status of your children's privileges",
+                "bodyTitle" => "Children Status - " . $now,
+                "sectionItems" => $childrenComponents
+            ];
+
+            $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+            $jsonReturn['$jason']['head']['data']['children'] = $childrenOnly;
+            $jsonReturn['$jason']['head']['actions'] = [
+                '$pull' => [
+                    "type" => '$reload'
                 ]
             ];
+            
+
+            dd($jsonReturn, $jsonReturnOriginal);
 
             return response()->json($jsonReturn);
             dd($this->jsonRequest, json_encode($jsonReturn));
@@ -186,7 +157,7 @@ class HomeController extends BaseController
         if(!is_null($request->header('Logged-In')) && $request->header('Logged-In') === "true"){
             if(!is_null($request->header('Logged-Date'))){
                 $date = Carbon::parse($request->header('Logged-Date'));
-                $now = Carbon::now()->setTimezone(\Auth::user()->timezone);
+                $now = Carbon::now();
                 $diff = $date->diffInDays($now);
                 
                 if($diff < 10){
