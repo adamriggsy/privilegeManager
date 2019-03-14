@@ -177,7 +177,7 @@ class HomeController extends BaseController
     public function jsonLogin(Request $request){
         $jsonReturn = [];
 
-        if(isset($request->header()->get('Logged-In')) && $request->header()->get('Logged-In') === "true"){
+        if(!is_null($request->header('Logged-In')) && $request->header('Logged-In') === "true"){
             return redirect()->route('getChildrenStatusJSON');
         }else{
 
@@ -275,7 +275,8 @@ class HomeController extends BaseController
                                                         'X-User-Email' => '{{$jason.email}}',
                                                         'X-User-Token' => '{{$jason.authentication_token}}',
                                                         'Authorization' => 'Bearer {{$jason.authentication_token}}',
-                                                        'Logged-In' => 'true'
+                                                        'Logged-In' => 'true',
+                                                        'Logged-Date' => Helpers::userTimeCurrent()
                                                     ) ,
                                                 ) ,
                                                 'success' => array(
