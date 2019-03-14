@@ -40,8 +40,13 @@ class HomeController extends BaseController
      */
     public function childrenStatus()
     {
-        //$children = User::find(\Auth::id())->children;
-        $children = User::find(1)->children;
+        if($this->jsonRequest){
+            $user = \Auth::guard('api')->user();
+        }else{
+            $user = User::find(\Auth::id());
+        }
+
+        $children = $user->children;
         $allPrivileges = Privilege::all('name')->toArray();
         $now = Helpers::userTimeCurrent();
 
