@@ -161,7 +161,7 @@ class ChildrenController extends BaseController
         if(self::isUserChild($childID) !== false){
             
             if($this->jsonRequest){
-                $renderedForm = view('includes.child.privilege-manager-ban')
+                $renderedForm = view('includes.forms.child-privilege-ban')
                     ->with('child', $this->child)
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
