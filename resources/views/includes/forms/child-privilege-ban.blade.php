@@ -40,12 +40,12 @@
     <div class="form-row">
         <div class="col">
             <label for="datepicker_start">Start Date:</label><br>
-            <input type="text" id="datepicker_start_ban" name="datepicker_start" class="datepicker form-control" placeholder="Start Date" autocomplete="off">
+            <input type="text" id="datepicker_start_ban" name="datepicker_start" class="datepicker form-control" placeholder="Start Date" autocomplete="off" {{$jsonRequest ? "readonly" : ""}}>
         </div>
     
         <div class="col">
             <label for="datepicker_end">End Date:</label><br>
-            <input type="text" id="datepicker_end_ban" name="datepicker_end" class="datepicker form-control" placeholder="End Date" autocomplete="off">
+            <input type="text" id="datepicker_end_ban" name="datepicker_end" class="datepicker form-control" placeholder="End Date" autocomplete="off" {{$jsonRequest ? "readonly" : ""}}>
         </div>
     </div>
     <br>
@@ -55,6 +55,7 @@
 </form>
 
 @if($jsonRequest)
+            
         </body>
     </html>
 @endif
