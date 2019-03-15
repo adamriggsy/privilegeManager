@@ -284,7 +284,7 @@ class HomeController extends BaseController
         $jsonReturn = AndroidApp::createJasonetteWrapper($options);
         $jsonReturn['$jason']['body']['style'] = [
             'border' => 'none',
-            'background' => '#646464',
+            'background' => 'rgb(100,100,100)',
         ]; 
         $jsonReturn['$jason']['body']['header']['style'] = [
             'background' => '#646464',
