@@ -20,9 +20,16 @@
             @include('includes.child.privilegeManageJS')
         </head>
         <body>
+    @php
+        $formRoute = "child.privilege.ban.process.json";
+    @endphp
+@else
+    @php
+        $formRoute = "child.privilege.ban.process";
+    @endphp
 @endif
 
-<form action="{{route('child.privilege.restore.process', ['id' => $child->id])}}{{$jsonRequest ? '?api_token=' . $api_token : ''}}" method="post" id="restorePrivilegeForm">
+<form action="{{route($formRoute, ['id' => $child->id])}}{{$jsonRequest ? '?api_token=' . $api_token : ''}}" method="post" id="restorePrivilegeForm">
     @csrf
     {{-- <input type="hidden" name="privilegeName" id="privilegeName" value="{{$parameters['privilege']}}"> --}}
     <p>

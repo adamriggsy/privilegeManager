@@ -158,7 +158,7 @@ class ChildrenController extends BaseController
     }
 
     public function banPrivilege($childID, Request $request){
-        if(self::isUserChild($childID) !== false){
+        if(self::isUserChild($childID, $this->jsonRequest) !== false){
             
             if($this->jsonRequest){
                 $user = \Auth::guard('api')->user();
@@ -217,11 +217,11 @@ class ChildrenController extends BaseController
     }
 
     public function banPrivilegeProcess($childID, Request $request){
-        if(self::isUserChild($childID) !== false){
+        if(self::isUserChild($childID, $this->jsonRequest) !== false){
             
             
             $dateRange = Helpers::parseDateRange($request->get('datepicker_start'), $request->get('datepicker_end'));
-            
+
             $numAdded = 0;
             foreach ($dateRange as $date) {
                 $hasPrivilege = self::checkPrivilegeBan($this->child, $request->get('privilege'), $date->format('Y-m-d'));
@@ -237,56 +237,23 @@ class ChildrenController extends BaseController
                     $numAdded++;
                 }
             }
-            
-            if($numAdded > 0){
-                $request->session()->flash('status', 'You have successfully added new privilege bans');
-            }else{
-                $request->session()->flash('error', 'No new privilege bans were added.');
-            }
 
             if($this->jsonRequest){
-                $options = [
-                    "title" => "Privilege Banned",
-                    "description" => "Banned the child's privilege",
-                    "bodyTitle" => "Banned - " . $this->child->name,
-                    "includeFooter" => true,
-                    "sectionItems" => [
-                        [
-                            'type' => 'space',
-                            'height' => '10',
-                        ],
-                        [
-                            'type' => 'label',
-                            'style' => [
-                                'width' => '100%',
-                                'align' => 'center',
-                                'font' => 'HelveticaNeue-Bold',
-                                'size' => '20',
-                                'padding' => '10',
-                                'background' => '#8bb92d',
-                                'color' => '#ffffff',
-                            ],
-                            'text' => 'Return to Management Page',
-                            'action' => [
-                                'type' => '$href',
-                                'options' => [
-                                    'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
-                                    'transition' => 'replace',
-                                ],
-                            ],
-                        ]
-                    ]
-                ];
-
-                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                return redirect()->route('getChildrenStatusJSON');
             }else{
+                if($numAdded > 0){
+                    $request->session()->flash('status', 'You have successfully added new privilege bans');
+                }else{
+                    $request->session()->flash('error', 'No new privilege bans were added.');
+                }
+
                 return redirect()->route('child.manage', ['id' => $this->child->id]);
             }
         }
     }
 
     public function restorePrivilege($childID, Request $request){
-        if(self::isUserChild($childID) !== false){
+        if(self::isUserChild($childID, $this->jsonRequest) !== false){
             if($this->jsonRequest){
                 $user = \Auth::guard('api')->user();
 
@@ -344,7 +311,7 @@ class ChildrenController extends BaseController
     }
 
     public function restorePrivilegeProcess($childID, Request $request){
-        if(self::isUserChild($childID) !== false){
+        if(self::isUserChild($childID, $this->jsonRequest) !== false){
             $dateRange = Helpers::parseDateRange($request->get('datepicker_start'), $request->get('datepicker_end'));
             
             $numProcessed = 0;
@@ -361,13 +328,17 @@ class ChildrenController extends BaseController
                     $numProcessed++;
                 }
             }
-            
-            if($numProcessed > 0){
-                $request->session()->flash('status', 'You have successfully restored the privileges');
+
+            if($this->jsonRequest){
+                return redirect()->route('getChildrenStatusJSON');
             }else{
-                $request->session()->flash('error', 'Not able to restore privileges');
+                if($numProcessed > 0){
+                    $request->session()->flash('status', 'You have successfully restored the privileges');
+                }else{
+                    $request->session()->flash('error', 'Not able to restore privileges');
+                }
+                return redirect()->route('child.manage', ['id' => $this->child->id]);
             }
-            return redirect()->route('child.manage', ['id' => $this->child->id]);
         }
     }
 
@@ -380,8 +351,12 @@ class ChildrenController extends BaseController
         return response()->json($wasSaved);
     }
 
-    public static function isUserChild($childID){
-        return array_search($childID, array_column(User::find(\Auth::id())->children->toArray(), 'id'));
+    public static function isUserChild($childID, $isJsonRequest){
+        if($isJsonRequest){
+            return array_search($childID, array_column(\Auth::guard('api')->user()->children->toArray(), 'id'));
+        }else{
+            return array_search($childID, array_column(User::find(\Auth::id())->children->toArray(), 'id'));
+        }
     }
 
     public static function checkPrivilegeBan(Child $child, $privilegeID, $date){
