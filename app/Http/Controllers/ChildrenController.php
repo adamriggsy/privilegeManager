@@ -161,16 +161,18 @@ class ChildrenController extends BaseController
         if(self::isUserChild($childID) !== false){
             
             if($this->jsonRequest){
-                $renderedForm = view('child-privilege-management')
+                $renderedForm = view('includes.child.privilege-manager-ban')
                     ->with('child', $this->child)
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
-                    ->with('action', 'ban')->render();
+                    ->with('action', 'ban')
+                    ->with('jsonRequest', true)
+                    ->render();
 
                 $options = [
                     "title" => "Ban Privilege",
                     "description" => "Ban a child's privilege",
-                    "bodyTitle" => "Ban - " . $this->child->id,
+                    "bodyTitle" => "Ban - " . $this->child->name,
                     "includeFooter" => true,
                     "sectionItems" => [
                         [
@@ -181,7 +183,7 @@ class ChildrenController extends BaseController
                             'type' => 'html',
                             'text' => $renderedForm,
                             'style' => [
-                                'height' => '200',
+                                'height' => '100%',
                             ],
                             'action' => [
                                 'type' => '$default'
@@ -204,7 +206,8 @@ class ChildrenController extends BaseController
                     ->with('child', $this->child)
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
-                    ->with('action', 'ban');
+                    ->with('action', 'ban')
+                    ->with('jsonRequest', false);
             }
         }
     }
