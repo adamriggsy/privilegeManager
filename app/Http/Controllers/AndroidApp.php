@@ -20,15 +20,6 @@ class AndroidApp extends Controller
                     'description' => isset($options['description']) ? $options['description'] : "Manage your children's privileges",
                     'icon' => '',
                     'offline' => 'true',
-                    'styles' => [
-                    ],
-                    'actions' => [
-                    ],
-                    'templates' => [
-                    ],
-                    'data' => [
-                        
-                    ]
                 ],
                 'body' => [
                     'header' => [

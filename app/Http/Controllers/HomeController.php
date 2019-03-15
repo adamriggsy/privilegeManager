@@ -164,142 +164,131 @@ class HomeController extends BaseController
             }
         }
 
+        $options = [
+            "title" => "login",
+            "description" => "",
+            "bodyTitle" => "Sign in",
+            "sectionItems" => [
+                0 => [
+                    'type' => 'space',
+                    'height' => '10',
+                ],
+                1 => [
+                    'type' => 'textfield',
+                    'name' => 'email',
+                    'style' => [
+                        'size' => '20',
+                        'color' => '#8bb92d',
+                        'font' => 'HelveticaNeue-Bold',
+                        'background' => '#575757',
+                        'padding' => '20',
+                    ],
+                    'placeholder' => 'enter email',
+                ],
+                2 => [
+                    'type' => 'space',
+                    'height' => '5',
+                ],
+                3 => [
+                    'type' => 'textfield',
+                    'name' => 'password',
+                    'placeholder' => 'enter password',
+                    'style' => [
+                        'size' => '20',
+                        'color' => '#8bb92d',
+                        'font' => 'HelveticaNeue-Bold',
+                        'background' => '#575757',
+                        'padding' => '20',
+                        'secure' => 'true',
+                    ],
+                ],
+                4 => [
+                    'type' => 'space',
+                    'height' => '5',
+                ],
+                5 => [
+                    'type' => 'label',
+                    'style' => [
+                        'width' => '100%',
+                        'align' => 'right',
+                        'font' => 'HelveticaNeue-Bold',
+                        'size' => '20',
+                        'padding' => '10',
+                        'background' => '#8bb92d',
+                        'color' => '#ffffff',
+                    ],
+                    'text' => 'Sign in >',
+                    'action' => [
+                        'type' => '$network.request',
+                        'options' => [
+                            'url' => 'http://manage.riggsdesignsolutions.com/json/login',
+                            'method' => 'post',
+                            'data' => [
+                                'email' => '{{$get.email}}',
+                                'password' => '{{$get.password}}',
+                            ],
+                        ],
+                        'success' => [
+                            // 'type' => '$util.banner',
+                            // 'options' => array(
+                            //     'title' => 'Success - {{$jason.email}}',
+                            //     'description' => '{{$jason.authentication_token}}',
+                            // ) ,
+                            'type' => '$session.set',
+                            'options' => [
+                                'domain' => 'http://manage.riggsdesignsolutions.com',
+                                'header' => [
+                                    'X-User-Email' => '{{$jason.email}}',
+                                    'X-User-Token' => '{{$jason.authentication_token}}',
+                                    'Authorization' => 'Bearer {{$jason.authentication_token}}',
+                                    'Logged-In' => 'true',
+                                    'Logged-Date' => Helpers::userTimeCurrent('Y-m-d H:i:s')
+                                ],
+                            ],
+                            'success' => [
+                                'type' => '$href',
+                                'options' => [
+                                    'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
+                                    'transition' => 'replace',
+                                ],
+                                // 'type' => '$util.banner',
+                                // 'options' => array(
+                                //     'title' => 'Authentication saved to Session',
+                                //     'description' => '{{session.}}',
+                                // ) ,
+                            ],
+                        ],
+                        'error' => [
+                            'type' => '$util.banner',
+                            'options' => [
+                                'title' => 'Error',
+                                'description' => 'Something went wrong. Please check if you entered your email and password correctly',
+                            ],
+                        ],
+                    ],
+                ],
+                6 => [
+                    'type' => 'label',
+                    'style' => [
+                        'size' => '16',
+                        'font' => 'HelveticaNeue-Bold',
+                        'text' => 'or',
+                        'padding' => '10',
+                        'align' => 'center',
+                    ],
+                ],
+            ]
+        ];
+        $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+        $jsonReturn['$jason']['body']['style'] = [
+            'border' => 'none',
+            'background' => '#646464',
+        ]; 
+        $jsonReturn['$jason']['body']['header']['style'] = [
+            'background' => '#646464',
+            'color' => '#ffffff',
+        ];
 
-        $jsonReturn = array(
-            '$jason' => array(
-                'head' => array(
-                    'title' => 'login',
-                ) ,
-                'body' => array(
-                    'style' => array(
-                        'border' => 'none',
-                        'background' => '#646464',
-                    ) ,
-                    'header' => array(
-                        'title' => 'Sign in',
-                        'style' => array(
-                            'background' => '#646464',
-                            'color' => '#ffffff',
-                        ) ,
-                    ) ,
-                    'sections' => array(
-                        0 => array(
-                            'items' => array(
-                                0 => array(
-                                    'type' => 'space',
-                                    'height' => '10',
-                                ) ,
-                                1 => array(
-                                    'type' => 'textfield',
-                                    'name' => 'email',
-                                    'style' => array(
-                                        'size' => '20',
-                                        'color' => '#8bb92d',
-                                        'font' => 'HelveticaNeue-Bold',
-                                        'background' => '#575757',
-                                        'padding' => '20',
-                                    ) ,
-                                    'placeholder' => 'enter email',
-                                ) ,
-                                2 => array(
-                                    'type' => 'space',
-                                    'height' => '5',
-                                ) ,
-                                3 => array(
-                                    'type' => 'textfield',
-                                    'name' => 'password',
-                                    'placeholder' => 'enter password',
-                                    'style' => array(
-                                        'size' => '20',
-                                        'color' => '#8bb92d',
-                                        'font' => 'HelveticaNeue-Bold',
-                                        'background' => '#575757',
-                                        'padding' => '20',
-                                        'secure' => 'true',
-                                    ) ,
-                                ) ,
-                                4 => array(
-                                    'type' => 'space',
-                                    'height' => '5',
-                                ) ,
-                                5 => array(
-                                    'type' => 'label',
-                                    'style' => array(
-                                        'width' => '100%',
-                                        'align' => 'right',
-                                        'font' => 'HelveticaNeue-Bold',
-                                        'size' => '20',
-                                        'padding' => '10',
-                                        'background' => '#8bb92d',
-                                        'color' => '#ffffff',
-                                    ) ,
-                                    'text' => 'Sign in >',
-                                    'action' => array(
-                                        'type' => '$network.request',
-                                        'options' => array(
-                                            'url' => 'http://manage.riggsdesignsolutions.com/json/login',
-                                            'method' => 'post',
-                                            'data' => array(
-                                                'email' => '{{$get.email}}',
-                                                'password' => '{{$get.password}}',
-                                            ) ,
-                                        ) ,
-                                        'success' => array(
-                                            // 'type' => '$util.banner',
-                                            // 'options' => array(
-                                            //     'title' => 'Success - {{$jason.email}}',
-                                            //     'description' => '{{$jason.authentication_token}}',
-                                            // ) ,
-                                            'type' => '$session.set',
-                                            'options' => array(
-                                                'domain' => 'http://manage.riggsdesignsolutions.com',
-                                                'header' => array(
-                                                    'X-User-Email' => '{{$jason.email}}',
-                                                    'X-User-Token' => '{{$jason.authentication_token}}',
-                                                    'Authorization' => 'Bearer {{$jason.authentication_token}}',
-                                                    'Logged-In' => 'true',
-                                                    'Logged-Date' => Helpers::userTimeCurrent('Y-m-d H:i:s')
-                                                ) ,
-                                            ) ,
-                                            'success' => array(
-                                                'type' => '$href',
-                                                'options' => array(
-                                                    'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
-                                                    'transition' => 'replace',
-                                                ) ,
-                                                // 'type' => '$util.banner',
-                                                // 'options' => array(
-                                                //     'title' => 'Authentication saved to Session',
-                                                //     'description' => '{{session.}}',
-                                                // ) ,
-                                            ) ,
-                                        ) ,
-                                        'error' => array(
-                                            'type' => '$util.banner',
-                                            'options' => array(
-                                                'title' => 'Error',
-                                                'description' => 'Something went wrong. Please check if you entered your email and password correctly',
-                                            ) ,
-                                        ) ,
-                                    ) ,
-                                ) ,
-                                6 => array(
-                                    'type' => 'label',
-                                    'style' => array(
-                                        'size' => '16',
-                                        'font' => 'HelveticaNeue-Bold',
-                                        'text' => 'or',
-                                        'padding' => '10',
-                                        'align' => 'center',
-                                    ) ,
-                                ) ,
-                            ) ,
-                        ) ,
-                    ) ,
-                ) ,
-            )
-        );
-        
         return response()->json($jsonReturn);
         
     }
