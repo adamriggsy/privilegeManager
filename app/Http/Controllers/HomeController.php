@@ -114,7 +114,7 @@ class HomeController extends BaseController
                 "title" => "Children Status",
                 "description" => "Quickly see the status of your children's privileges",
                 "bodyTitle" => "Children Status - " . $now,
-                "includeDrawer" => true,
+                "includeFooter" => true,
                 "sectionItems" => $childrenComponents
             ];
 
@@ -169,7 +169,7 @@ class HomeController extends BaseController
             "title" => "login",
             "description" => "",
             "bodyTitle" => "Sign in",
-            "includeDrawer" => true,
+            "includeFooter" => false,
             "sectionItems" => [
                 0 => [
                     'type' => 'space',

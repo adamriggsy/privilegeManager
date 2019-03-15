@@ -48,41 +48,12 @@ class AndroidApp extends Controller
             ]
         ];
 
-        if(isset($options['includeDrawer']) && $options['includeDrawer']){
-        	$jasonetteStructure['drawer'] = 
+        if(isset($options['includeFooter']) && $options['includeFooter']){
+        	$jasonetteStructure['$jason']['body']['footer'] = 
         	[
-			    "activator" => [
-			       "image" => "http://manage.riggsdesignsolutions.com/images/menu-512.png",
-			        "style" => [
-			            "height" => "21",
-			            "top" => "50",
-			            "left" => "50",
-			       ]
-			    ],
-			    "contents" => [
-					"style" => [
-						"background" => "rgba(255,255,255,0.8)",
-						"color:disabled" => "#cecece",
-						"color" => "#009efa"
-					],
-			    	"items"=> [
-			      		[
-					        "image" => "",
-					        "text" => "Me",
-					        "style" => [
-					          "height" => "21"
-					        ],
-					        "url" => "http://manage.riggsdesignsolutions.com/api/json/children-status"
-					    ],
-					    [
-					        "image" => "",
-					        "text" => "Logout",
-					        "style" => [
-					          "height" => "21"
-					        ],
-					        "url" => "http://manage.riggsdesignsolutions.com/api/json/logout"
-			      		],
-			  		]
+			    "items" => [
+			    	'text' => 'Logout'
+			    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/logout'
 			    ]
 			];
         }
