@@ -90,6 +90,7 @@ class HomeController extends BaseController
                     $statusText = $name . ' - ';
                     $statusText .= $status ? 'no' : 'yes';
                     $statusColor = $status ? '#f5c6cb' : '#c3e6cb';
+                    $modalLink = $status ? 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/ban' : 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/restore';
 
                     $childInfo[] = [
                         'type' => 'label',
@@ -97,6 +98,13 @@ class HomeController extends BaseController
                         'style' => [
                             'background' => $statusColor,
                             'padding' => '10',
+                        ],
+                        'action' => [
+                            'type' => '$href',
+                            'options' => [
+                                'url' => $modalLink,
+                                'transition' => 'modal',
+                            ],
                         ]
                     ];
                 }

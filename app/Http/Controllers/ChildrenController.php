@@ -8,6 +8,7 @@ use App\User;
 use App\Privilege;
 use Carbon\Carbon;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\AndroidApp;
 
 class ChildrenController extends BaseController
 {
@@ -37,6 +38,7 @@ class ChildrenController extends BaseController
                 $this->childAvailPrivileges = Privilege::whereIn('id', $this->child->privileges)->get();
                 $this->userAvailPrivileges = Privilege::whereIn('id', $this->child->user->my_privileges)->get();
             }
+
         }else{
             $id = 1;
         }
@@ -157,12 +159,53 @@ class ChildrenController extends BaseController
 
     public function banPrivilege($childID, Request $request){
         if(self::isUserChild($childID) !== false){
-            return view('child-privilege-management')
-                ->with('child', $this->child)
-                ->with('parameters', $request->all())
-                ->with('allPrivileges', $this->childAvailPrivileges)
-                ->with('action', 'ban');
-            dd($child, $request->all());
+            
+            if($this->jsonRequest){
+                $renderedForm = view('child-privilege-management')
+                    ->with('child', $this->child)
+                    ->with('parameters', $request->all())
+                    ->with('allPrivileges', $this->childAvailPrivileges)
+                    ->with('action', 'ban')->render();
+
+                $options = [
+                    "title" => "Ban Privilege",
+                    "description" => "Ban a child's privilege",
+                    "bodyTitle" => "Ban - " . $this->child->id,
+                    "includeFooter" => true,
+                    "sectionItems" => [
+                        [
+                            'type' => 'space',
+                            'height' => '10',
+                        ],
+                        [
+                            'type' => 'html',
+                            'text' => $renderedForm,
+                            'style' => [
+                                'height' => '200',
+                            ],
+                            'action' => [
+                                'type' => '$default'
+                            ],
+                        ],
+                    ]
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                $jsonReturn['$jason']['head']['data']['children'] = [];
+                $jsonReturn['$jason']['head']['actions'] = [
+                    '$pull' => [
+                        "type" => '$reload'
+                    ]
+                ];
+
+                return response()->json($jsonReturn);
+            }else{
+                return view('child-privilege-management')
+                    ->with('child', $this->child)
+                    ->with('parameters', $request->all())
+                    ->with('allPrivileges', $this->childAvailPrivileges)
+                    ->with('action', 'ban');
+            }
         }
     }
 
