@@ -22,5 +22,5 @@ Route::middleware('auth:api')->get('/child-privilege-feed/{childID}', 'HomeContr
 Route::middleware('auth:api')->prefix('json')->group(function () {
 	Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
 	Route::post('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
-	Route::post('/logout', 'HomeController@jsonLogout')->name('logoutJSON');
+	Route::get('/logout', 'HomeController@jsonLogout')->name('logoutJSON');
 });

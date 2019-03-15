@@ -324,13 +324,13 @@ class HomeController extends BaseController
             '$load' => [
                 "type" => '$session.reset',
                 "options" => [
-                    "domain" => "sessionjason.herokuapp.com"
+                    "domain" => "http://manage.riggsdesignsolutions.com"
                 ],
                 "success" => [
                     "type" => '$href',
                     "options" => [
                         "url" => url('/json/login'),
-                        "view": "App"
+                        'transition' => 'replace',
                     ]
                 ]
             ]
