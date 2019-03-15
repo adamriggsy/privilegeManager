@@ -48,43 +48,44 @@ class AndroidApp extends Controller
             ]
         ];
 
-        if(isset($options['drawer']) && $options['drawer']){
-        	$jasonetteStructure['drawer'] = [
+        if(isset($options['includeDrawer']) && $options['includeDrawer']){
+        	$jasonetteStructure['drawer'] = 
+        	[
 			    "activator" => [
-			       "image": url('/images/menu-512.png'),
+			       "image" => "http://manage.riggsdesignsolutions.com/images/menu-512.png",
 			        "style" => [
-			            "height": "21",
-			            "top": "50",
-			            "left": "50",
+			            "height" => "21",
+			            "top" => "50",
+			            "left" => "50",
 			       ]
 			    ],
 			    "contents" => [
 					"style" => [
-						"background": "rgba(255,255,255,0.8)",
-						"color:disabled": "#cecece",
-						"color": "#009efa"
+						"background" => "rgba(255,255,255,0.8)",
+						"color:disabled" => "#cecece",
+						"color" => "#009efa"
 					],
 			    	"items"=> [
 			      		[
-					        "image": "",
-					        "text": "Me",
+					        "image" => "",
+					        "text" => "Me",
 					        "style" => [
-					          "height": "21"
+					          "height" => "21"
 					        ],
-					        "url": "https://raw.githubusercontent.com/Jasonette/Twitter-UI-example/master/me.jsonhttp://manage.riggsdesignsolutions.com/api/json/children-status"
+					        "url" => "http://manage.riggsdesignsolutions.com/api/json/children-status"
 					    ],
 					    [
-					        "image": "",
-					        "text": "Logout",
+					        "image" => "",
+					        "text" => "Logout",
 					        "style" => [
-					          "height": "21"
+					          "height" => "21"
 					        ],
-					        "url": "http://manage.riggsdesignsolutions.com/api/json/logout"
+					        "url" => "http://manage.riggsdesignsolutions.com/api/json/logout"
 			      		],
 			  		]
 			    ]
-			]
-        ];
+			];
+        }
 
         return $jasonetteStructure;
     }

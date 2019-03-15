@@ -169,7 +169,7 @@ class HomeController extends BaseController
             "title" => "login",
             "description" => "",
             "bodyTitle" => "Sign in",
-            "includeDrawer" => false,
+            "includeDrawer" => true,
             "sectionItems" => [
                 0 => [
                     'type' => 'space',
