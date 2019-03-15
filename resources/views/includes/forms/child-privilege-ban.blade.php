@@ -22,7 +22,7 @@
         <body>
 @endif
 
-<form action="{{route('child.privilege.ban.process', ['id' => $child->id])}}" method="post" id="banPrivilegeForm">
+<form action="{{route('child.privilege.ban.process', ['id' => $child->id])}}{{$jsonRequest ? '?api_token=' . $api_token : ''}}" method="post" id="banPrivilegeForm">
     @csrf
     {{-- <input type="hidden" name="privilegeName" id="privilegeName" value="{{$parameters['privilege']}}"> --}}
     <p>

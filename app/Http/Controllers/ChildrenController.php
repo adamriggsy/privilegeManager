@@ -161,12 +161,15 @@ class ChildrenController extends BaseController
         if(self::isUserChild($childID) !== false){
             
             if($this->jsonRequest){
+                $user = \Auth::guard('api')->user();
+
                 $renderedForm = view('includes.forms.child-privilege-ban')
                     ->with('child', $this->child)
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
                     ->with('action', 'ban')
                     ->with('jsonRequest', true)
+                    ->with('api_token', $user->api_token)
                     ->render();
 
                 $options = [
@@ -207,7 +210,8 @@ class ChildrenController extends BaseController
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
                     ->with('action', 'ban')
-                    ->with('jsonRequest', false);
+                    ->with('jsonRequest', false)
+                    ->with('api_token', false);
             }
         }
     }
@@ -239,19 +243,60 @@ class ChildrenController extends BaseController
             }else{
                 $request->session()->flash('error', 'No new privilege bans were added.');
             }
-            return redirect()->route('child.manage', ['id' => $this->child->id]);
+
+            if($this->jsonRequest){
+                $options = [
+                    "title" => "Privilege Banned",
+                    "description" => "Banned the child's privilege",
+                    "bodyTitle" => "Banned - " . $this->child->name,
+                    "includeFooter" => true,
+                    "sectionItems" => [
+                        [
+                            'type' => 'space',
+                            'height' => '10',
+                        ],
+                        [
+                            'type' => 'label',
+                            'style' => [
+                                'width' => '100%',
+                                'align' => 'center',
+                                'font' => 'HelveticaNeue-Bold',
+                                'size' => '20',
+                                'padding' => '10',
+                                'background' => '#8bb92d',
+                                'color' => '#ffffff',
+                            ],
+                            'text' => 'Return to Management Page',
+                            'action' => [
+                                'type' => '$href',
+                                'options' => [
+                                    'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
+                                    'transition' => 'replace',
+                                ],
+                            ],
+                        ]
+                    ]
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+            }else{
+                return redirect()->route('child.manage', ['id' => $this->child->id]);
+            }
         }
     }
 
     public function restorePrivilege($childID, Request $request){
         if(self::isUserChild($childID) !== false){
             if($this->jsonRequest){
+                $user = \Auth::guard('api')->user();
+
                 $renderedForm = view('includes.forms.child-privilege-restore')
                     ->with('child', $this->child)
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
                     ->with('action', 'ban')
                     ->with('jsonRequest', true)
+                    ->with('api_token', $user->api_token)
                     ->render();
 
                 $options = [
@@ -282,13 +327,6 @@ class ChildrenController extends BaseController
                 $jsonReturn['$jason']['head']['actions'] = [
                     '$pull' => [
                         "type" => '$reload',
-                    ],
-                    "notify" => [
-                        "type" => '$util.alert',
-                        "options" => [
-                            "title" => "Link Clicked",
-                            "description" => 'You just clicked {{$jason.url}}'
-                        ]
                     ]
                 ];
 
@@ -299,7 +337,8 @@ class ChildrenController extends BaseController
                     ->with('parameters', $request->all())
                     ->with('allPrivileges', $this->childAvailPrivileges)
                     ->with('action', 'restore')
-                    ->with('jsonRequest', false);
+                    ->with('jsonRequest', false)
+                    ->with('api_token', $user->api_token);
             }
         }
     }
