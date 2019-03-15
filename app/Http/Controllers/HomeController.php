@@ -295,6 +295,51 @@ class HomeController extends BaseController
         
     }
 
+    public function jsonLogout(Request $request){
+        $options = [
+            "title" => "Logout",
+            "description" => "",
+            "bodyTitle" => "Logout",
+            "includeFooter" => false,
+            "sectionItems" => [
+                [
+                    'type' => 'space',
+                    'height' => '10',
+                ],
+                [
+                    'text' => 'Logging Out...',
+                ],
+            ]
+        ];
+        $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+        $jsonReturn['$jason']['body']['style'] = [
+            'border' => 'none',
+            'background' => '#646464',
+        ]; 
+        $jsonReturn['$jason']['body']['header']['style'] = [
+            'background' => '#646464',
+            'color' => '#ffffff',
+        ];
+        $jsonReturn['$jason']['head']['actions'] = [
+            '$load' => [
+                "type" => '$session.reset',
+                "options" => [
+                    "domain" => "sessionjason.herokuapp.com"
+                ],
+                "success" => [
+                    "type" => '$href',
+                    "options" => [
+                        "url" => url('/json/login'),
+                        "view": "App"
+                    ]
+                ]
+            ]
+        ];
+
+        return response()->json($jsonReturn);
+        
+    }
+
     public function handleJsonLogin(Request $request){
         $input = $request->all();
         $error = false;

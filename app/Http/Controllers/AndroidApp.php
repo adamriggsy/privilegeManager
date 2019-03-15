@@ -52,31 +52,34 @@ class AndroidApp extends Controller
         	$jasonetteStructure['$jason']['body']['footer']['tabs'] = 
         	[
 			    "style" => [
-			        "background" => "rgba(255,255,255,0.9)",
-			        "color" => "#009efa"
+			        "background" => "rgba(255,255,255,0.8)",
+                    "color" => "#000000"
 			    ],
 			    "items" => [
 			    	[
-				    	'image' => url('/images/logout.png'),
-				    	'text' => 'Logout',
-				    	'style' => [
-				    	],
-				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/logout'
-				    ],
-				    [
 				    	'image' => url('/images/user.png'),
-				    	'text' => 'User',
 				    	'style' => [
+				    	    "height" => "60",
+				    	    "width" => "60"
 				    	],
 				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/user'
 				    ],
 				    [
 				    	'image' => url('/images/children.png'),
-				    	'text' => 'Children',
 				    	'style' => [
+				    	    "height" => "60",
+				    	    "width" => "60"
 				    	],
 				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status'
-				    ]
+				    ],
+				    [
+				    	'image' => url('/images/logout.png'),
+				    	'style' => [
+				    	    "height" => "60",
+				    	    "width" => "60"
+				    	],
+				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/logout'
+				    ],
 			    ]
 			];
         }
