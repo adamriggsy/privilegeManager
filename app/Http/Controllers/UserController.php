@@ -83,6 +83,11 @@ class UserController extends BaseController
             ];
 
             $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+            $jsonReturn['$jason']['head']['actions'] = [
+                '$pull' => [
+                    "type" => '$reload'
+                ]
+            ];
 
             return response()->json($jsonReturn);
         }else{
