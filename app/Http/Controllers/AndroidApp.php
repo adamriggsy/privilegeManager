@@ -49,11 +49,34 @@ class AndroidApp extends Controller
         ];
 
         if(isset($options['includeFooter']) && $options['includeFooter']){
-        	$jasonetteStructure['$jason']['body']['footer'] = 
+        	$jasonetteStructure['$jason']['body']['footer']['tabs'] = 
         	[
+			    "style" => [
+			        "background" => "rgba(255,255,255,0.9)",
+			        "color" => "#009efa"
+			    ],
 			    "items" => [
-			    	'text' => 'Logout'
-			    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/logout'
+			    	[
+				    	'image' => url('/images/logout.png'),
+				    	'text' => 'Logout',
+				    	'style' => [
+				    	],
+				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/logout'
+				    ],
+				    [
+				    	'image' => url('/images/user.png'),
+				    	'text' => 'User',
+				    	'style' => [
+				    	],
+				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/user'
+				    ],
+				    [
+				    	'image' => url('/images/children.png'),
+				    	'text' => 'Children',
+				    	'style' => [
+				    	],
+				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status'
+				    ]
 			    ]
 			];
         }
