@@ -281,7 +281,14 @@ class ChildrenController extends BaseController
                 $jsonReturn['$jason']['head']['data']['children'] = [];
                 $jsonReturn['$jason']['head']['actions'] = [
                     '$pull' => [
-                        "type" => '$reload'
+                        "type" => '$reload',
+                    ],
+                    "notify" => [
+                        "type" => '$util.alert',
+                        "options" => [
+                            "title" => "Link Clicked",
+                            "description" => 'You just clicked {{$jason.url}}'
+                        ]
                     ]
                 ];
 
