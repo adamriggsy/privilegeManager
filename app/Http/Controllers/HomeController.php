@@ -314,23 +314,30 @@ class HomeController extends BaseController
         $jsonReturn = AndroidApp::createJasonetteWrapper($options);
         $jsonReturn['$jason']['body']['style'] = [
             'border' => 'none',
-            'background' => '#646464',
+            'background' => 'rgb(100,100,100)',
         ]; 
         $jsonReturn['$jason']['body']['header']['style'] = [
-            'background' => '#646464',
+            'background' => 'rgb(100,100,100)',
             'color' => '#ffffff',
         ];
         $jsonReturn['$jason']['head']['actions'] = [
             '$load' => [
                 "type" => '$session.reset',
                 "options" => [
-                    "domain" => "http://manage.riggsdesignsolutions.com"
+                    "domain" => "http://manage.riggsdesignsolutions.com",
+                    'header' => [
+                        'X-User-Email' => '',
+                        'X-User-Token' => '',
+                        'Authorization' => '',
+                        'Logged-In' => 'false',
+                        'Logged-Date' => ''
+                    ],
                 ],
                 "success" => [
                     "type" => '$href',
                     "options" => [
                         "url" => url('/json/login'),
-                        'transition' => 'replace',
+                        'transition' => 'push',
                     ]
                 ]
             ]
