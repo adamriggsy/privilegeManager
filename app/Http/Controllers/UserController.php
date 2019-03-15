@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\AndroidApp;
+use Carbon\Carbon;
 
 class UserController extends BaseController
 {
@@ -17,8 +19,61 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $user = User::find(\Auth::id());
-        return view('user')->with('user', $user);
+        if($this->jsonRequest){
+            $user = \Auth::guard('api')->user();
+            $children = $user->children;
+
+            $childrenComponents = [
+                [
+                    'type' => 'label',
+                    'text' => "Last updated: " . Helpers::userTimeCurrent('m-d-Y H:i:s'),
+                    'style' => [
+                        'align' => 'center'
+                    ]
+                ]
+            ];
+
+            $childrenOnly = [];
+
+            foreach($children as $child){
+                $childInfo = [];
+                $childInfo[] = [
+                    'type' => 'label',
+                    'text' => $child->name,
+                    'style' => [
+                        'padding' => 20,
+                        'align' => 'center',
+                        'size' => '18'
+                    ]
+                ];
+
+                $childComponent = [
+                    'type' => 'vertical',
+                    'components' => $childInfo
+                ];
+                
+                $childrenComponents[] = $childComponent;
+                $childrenOnly[] = $child->toArray();
+            }
+
+
+            $jsonReturn = [];
+
+            $options = [
+                "title" => "User Page",
+                "description" => "All about you",
+                "bodyTitle" => "User Information",
+                "includeFooter" => true,
+                "sectionItems" => $childrenComponents
+            ];
+
+            $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+
+            return response()->json($jsonReturn);
+        }else{
+            $user = User::find(\Auth::id());
+            return view('user')->with('user', $user);
+        }
     }
 
     /**

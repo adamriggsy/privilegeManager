@@ -23,4 +23,5 @@ Route::middleware('auth:api')->prefix('json')->group(function () {
 	Route::get('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
 	Route::post('/children-status', 'HomeController@childrenStatus')->name('getChildrenStatusJSON');
 	Route::get('/logout', 'HomeController@jsonLogout')->name('logoutJSON');
+	Route::get('/user', 'UserController@index')->name('getUserJSON');
 });
