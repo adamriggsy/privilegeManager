@@ -245,11 +245,55 @@ class ChildrenController extends BaseController
 
     public function restorePrivilege($childID, Request $request){
         if(self::isUserChild($childID) !== false){
-            return view('child-privilege-management')
-                ->with('child', $this->child)
-                ->with('parameters', $request->all())
-                ->with('allPrivileges', $this->childAvailPrivileges)
-                ->with('action', 'restore');
+            if($this->jsonRequest){
+                $renderedForm = view('includes.forms.child-privilege-restore')
+                    ->with('child', $this->child)
+                    ->with('parameters', $request->all())
+                    ->with('allPrivileges', $this->childAvailPrivileges)
+                    ->with('action', 'ban')
+                    ->with('jsonRequest', true)
+                    ->render();
+
+                $options = [
+                    "title" => "Restore Privilege",
+                    "description" => "Restore a child's privilege",
+                    "bodyTitle" => "Restore - " . $this->child->name,
+                    "includeFooter" => true,
+                    "sectionItems" => [
+                        [
+                            'type' => 'space',
+                            'height' => '10',
+                        ],
+                        [
+                            'type' => 'html',
+                            'text' => $renderedForm,
+                            'style' => [
+                                'height' => '100%',
+                            ],
+                            'action' => [
+                                'type' => '$default'
+                            ],
+                        ],
+                    ]
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                $jsonReturn['$jason']['head']['data']['children'] = [];
+                $jsonReturn['$jason']['head']['actions'] = [
+                    '$pull' => [
+                        "type" => '$reload'
+                    ]
+                ];
+
+                return response()->json($jsonReturn);
+            }else{
+                return view('child-privilege-management')
+                    ->with('child', $this->child)
+                    ->with('parameters', $request->all())
+                    ->with('allPrivileges', $this->childAvailPrivileges)
+                    ->with('action', 'restore')
+                    ->with('jsonRequest', false);
+            }
         }
     }
 

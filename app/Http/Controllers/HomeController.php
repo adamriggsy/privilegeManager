@@ -92,6 +92,8 @@ class HomeController extends BaseController
                     $statusColor = $status ? '#f5c6cb' : '#c3e6cb';
                     $modalLink = $status ? 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/ban' : 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/restore';
 
+                    $modalLink .= "?date=" . $now;
+
                     $childInfo[] = [
                         'type' => 'label',
                         'text' => $name,
