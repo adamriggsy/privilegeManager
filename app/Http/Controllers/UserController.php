@@ -44,6 +44,21 @@ class UserController extends BaseController
                         'padding' => 20,
                         'align' => 'center',
                         'size' => '18'
+                    ],
+                    'action' => [
+                        'type' => '$href',
+                        'options' => [
+                            'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status',
+                            'transition' => 'replace',
+                        ],
+                    ]
+                ];
+                $childInfo[] = [
+                    'type' => 'label',
+                    'text' => $child->birthdate,
+                    'style' => [
+                        'align' => 'center',
+                        'size' => '13'
                     ]
                 ];
 

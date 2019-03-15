@@ -24,20 +24,6 @@ class AndroidApp extends Controller
                 'body' => [
                     'header' => [
                         "title" => isset($options['bodyTitle']) ? $options['bodyTitle'] : 'New Screen',
-                        // 'menu' => [
-                        //     'text' => 'menu',
-                        //     'style' => [
-                        //         'color' => '#0000ff',
-                        //         'font' => 'HelveticaNeue-Bold',
-                        //         'size' => '17'
-                        //     ],
-                        //     'action' => [
-                        //         'type' => '$util.toast',
-                        //         'options' => [
-                        //             'text' => 'Good Job!'
-                        //         ]
-                        //     ]
-                        // ]
                     ],
                     'sections' => [
                         [
@@ -57,20 +43,20 @@ class AndroidApp extends Controller
 			    ],
 			    "items" => [
 			    	[
-				    	'image' => url('/images/user.png'),
-				    	'style' => [
-				    	    "height" => "60",
-				    	    "width" => "60"
-				    	],
-				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/user'
-				    ],
-				    [
 				    	'image' => url('/images/children.png'),
 				    	'style' => [
 				    	    "height" => "60",
 				    	    "width" => "60"
 				    	],
 				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/children-status'
+				    ],
+				    [
+				    	'image' => url('/images/user.png'),
+				    	'style' => [
+				    	    "height" => "60",
+				    	    "width" => "60"
+				    	],
+				    	'url' => 'http://manage.riggsdesignsolutions.com/api/json/user'
 				    ],
 				    [
 				    	'image' => url('/images/logout.png'),
