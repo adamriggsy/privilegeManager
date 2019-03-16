@@ -137,24 +137,29 @@ class ChildrenController extends BaseController
         //
     }
 
-    public function managePrivileges($id, $startDay = false, $endDay = false){
-        if($startDay === false){
-            $startDay = Helpers::userTimeCurrent();
+    public function managePrivileges($id, $startDay = false, $endDay = false, Request $request){
+        if(self::isUserChild($id, $this->jsonRequest) !== false){
+            if($startDay === false){
+                $startDay = Helpers::userTimeCurrent();
+            }
+
+            if($endDay === false){
+                $endDay = Helpers::userTimeCurrent();
+            }
+
+            $child = Child::find($id);
+            //get the available privileges for the child
+            $allPrivileges = $this->childAvailPrivileges;
+
+            $dateRange = Helpers::parseDateRange($startDay, $endDay);
+
+            $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
+            
+            return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges)->with('jsonRequest', $this->jsonRequest);
+        }else{
+            $request->session()->flash('error', "You don't have the ability to manage that child");
+            return redirect()->route('user.index');
         }
-
-        if($endDay === false){
-            $endDay = Helpers::userTimeCurrent();
-        }
-
-        $child = Child::find($id);
-        //get the available privileges for the child
-        $allPrivileges = $this->childAvailPrivileges;
-
-        $dateRange = Helpers::parseDateRange($startDay, $endDay);
-
-        $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
-        
-        return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges)->with('jsonRequest', $this->jsonRequest);
     }
 
     public function banPrivilege($childID, Request $request){
@@ -373,6 +378,7 @@ class ChildrenController extends BaseController
     }
 
     public static function isUserChild($childID, $isJsonRequest){
+        
         if($isJsonRequest){
             return array_search($childID, array_column(\Auth::guard('api')->user()->children->toArray(), 'id'));
         }else{
