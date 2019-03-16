@@ -154,7 +154,7 @@ class ChildrenController extends BaseController
 
         $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
         
-        return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges);
+        return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges)->with('jsonRequest', $this->jsonRequest);
     }
 
     public function banPrivilege($childID, Request $request){
