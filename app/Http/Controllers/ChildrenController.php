@@ -258,7 +258,7 @@ class ChildrenController extends BaseController
                 $options = [
                     "title" => "Ban Privilege Submitted",
                     "description" => "Ban submitted",
-                    "bodyTitle" => "Done - " . $now,
+                    "bodyTitle" => "Done - ",
                     "includeFooter" => true,
                     "sectionItems" => [
                         [
@@ -281,13 +281,12 @@ class ChildrenController extends BaseController
                 ];
 
                 $jsonReturn = AndroidApp::createJasonetteWrapper($options);
-                $jsonReturn['$jason']['head']['data']['children'] = $childrenOnly;
                 $jsonReturn['$jason']['head']['actions'] = [
                     '$load' => [
                         "type" => 'href',
                         "options" => [
-                            "url": "http://manage.riggsdesignsolutions.com/api/json/children-status",
-                            "transition": "modal"
+                            "url" => "http://manage.riggsdesignsolutions.com/api/json/children-status",
+                            "transition" => "modal"
                         ]
                     ]
                 ];
@@ -392,7 +391,42 @@ class ChildrenController extends BaseController
             }
 
             if($this->jsonRequest){
-                return redirect()->route('getChildrenStatusJSON');
+                $options = [
+                    "title" => "Restore Privilege Submitted",
+                    "description" => "Restoration submitted",
+                    "bodyTitle" => "Done - ",
+                    "includeFooter" => true,
+                    "sectionItems" => [
+                        [
+                            'type' => 'space',
+                            'height' => '10',
+                        ],
+                        [
+                            'type' => 'textfield',
+                            'name' => 'email',
+                            'style' => [
+                                'size' => '20',
+                                'color' => '#8bb92d',
+                                'font' => 'HelveticaNeue-Bold',
+                                'background' => '#575757',
+                                'padding' => '20',
+                            ],
+                            'placeholder' => 'enter email',
+                        ],
+                    ]
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                $jsonReturn['$jason']['head']['actions'] = [
+                    '$load' => [
+                        "type" => 'href',
+                        "options" => [
+                            "url" => "http://manage.riggsdesignsolutions.com/api/json/children-status",
+                            "transition" => "modal"
+                        ]
+                    ]
+                ];
+                return response()->json($jsonReturn);
             }else{
                 if($numProcessed > 0){
                     $request->session()->flash('status', 'You have successfully restored the privileges');
