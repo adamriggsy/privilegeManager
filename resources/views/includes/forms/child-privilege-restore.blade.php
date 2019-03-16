@@ -21,11 +21,11 @@
         </head>
         <body>
     @php
-        $formRoute = "child.privilege.ban.process.json";
+        $formRoute = "child.privilege.restore.process.json";
     @endphp
 @else
     @php
-        $formRoute = "child.privilege.ban.process";
+        $formRoute = "child.privilege.restore.process";
     @endphp
 @endif
 
