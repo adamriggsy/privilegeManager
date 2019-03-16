@@ -222,7 +222,7 @@ class ChildrenController extends BaseController
                 $options = [
                     "title" => "Manage Child",
                     "description" => "Manage a child's privileges",
-                    "bodyTitle" => $this->child->name . "'s privileges for " . $startDay . " through " . $endDay,
+                    "bodyTitle" => $this->child->name . "'s privileges",
                     "includeFooter" => true,
                     "sectionItems" => $childStatuses
                 ];
