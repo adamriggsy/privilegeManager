@@ -255,7 +255,43 @@ class ChildrenController extends BaseController
             }
 
             if($this->jsonRequest){
-                return redirect()->route('getChildrenStatusJSON');
+                $options = [
+                    "title" => "Ban Privilege Submitted",
+                    "description" => "Ban submitted",
+                    "bodyTitle" => "Done - " . $now,
+                    "includeFooter" => true,
+                    "sectionItems" => [
+                        [
+                            'type' => 'space',
+                            'height' => '10',
+                        ],
+                        [
+                            'type' => 'textfield',
+                            'name' => 'email',
+                            'style' => [
+                                'size' => '20',
+                                'color' => '#8bb92d',
+                                'font' => 'HelveticaNeue-Bold',
+                                'background' => '#575757',
+                                'padding' => '20',
+                            ],
+                            'placeholder' => 'enter email',
+                        ],
+                    ]
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                $jsonReturn['$jason']['head']['data']['children'] = $childrenOnly;
+                $jsonReturn['$jason']['head']['actions'] = [
+                    '$load' => [
+                        "type" => 'href',
+                        "options" => [
+                            "url": "http://manage.riggsdesignsolutions.com/api/json/children-status",
+                            "transition": "modal"
+                        ]
+                    ]
+                ];
+                return response()->json($jsonReturn);
             }else{
                 if($numAdded > 0){
                     $request->session()->flash('status', 'You have successfully added new privilege bans');
