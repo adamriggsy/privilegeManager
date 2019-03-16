@@ -83,6 +83,13 @@ class HomeController extends BaseController
                         'padding' => 20,
                         'align' => 'center',
                         'size' => '18'
+                    ],
+                    'action' =>[
+                        'type' => '$href',
+                        'options' => [
+                            'url' => 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . 'manage',
+                            'transition' => 'replace'
+                        ]
                     ]
                 ];
                 //dd($child->privilegeStatus);
@@ -182,11 +189,11 @@ class HomeController extends BaseController
             "bodyTitle" => "Sign in",
             "includeFooter" => false,
             "sectionItems" => [
-                0 => [
+                [
                     'type' => 'space',
                     'height' => '10',
                 ],
-                1 => [
+                [
                     'type' => 'textfield',
                     'name' => 'email',
                     'style' => [
@@ -198,11 +205,11 @@ class HomeController extends BaseController
                     ],
                     'placeholder' => 'enter email',
                 ],
-                2 => [
+                [
                     'type' => 'space',
                     'height' => '5',
                 ],
-                3 => [
+                [
                     'type' => 'textfield',
                     'name' => 'password',
                     'placeholder' => 'enter password',
@@ -215,11 +222,11 @@ class HomeController extends BaseController
                         'secure' => 'true',
                     ],
                 ],
-                4 => [
+                [
                     'type' => 'space',
                     'height' => '5',
                 ],
-                5 => [
+                [
                     'type' => 'label',
                     'style' => [
                         'width' => '100%',
@@ -280,7 +287,7 @@ class HomeController extends BaseController
                         ],
                     ],
                 ],
-                6 => [
+                [
                     'type' => 'label',
                     'style' => [
                         'size' => '16',

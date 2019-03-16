@@ -139,6 +139,11 @@ class ChildrenController extends BaseController
 
     public function managePrivileges($id, $startDay = false, $endDay = false, Request $request){
         if(self::isUserChild($id, $this->jsonRequest) !== false){
+            if($this->jsonRequest){
+                $startDay = Carbon::now();
+                $endDay = Carbon::now()->addDays(7);
+            }
+
             if($startDay === false){
                 $startDay = Helpers::userTimeCurrent();
             }
@@ -155,7 +160,77 @@ class ChildrenController extends BaseController
 
             $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
             
-            return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges)->with('jsonRequest', $this->jsonRequest);
+            if($this->jsonRequest){
+                
+                $childStatuses = [];
+
+                foreach($child->privilegeStatus as $date => $privileges){
+                    $dayInfo = [];
+                    $dayInfo = [
+                        'type' => 'label',
+                        'text' => $date,
+                        'style' => [
+                            'padding' => 20,
+                            'align' => 'center',
+                            'size' => '18'
+                        ]
+                    ];
+
+                    foreach($privileges as $name => $status){
+                        $statusText = $name . ' - ';
+                        $statusText .= $status ? 'no' : 'yes';
+                        $statusColor = $status ? '#f5c6cb' : '#c3e6cb';
+                        $modalLink = $status ? 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/restore' : 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/ban';
+
+                        $modalLink .= "?date=" . $date;
+                        $modalLink .= "&privilege=" . urlencode($name);
+
+                        $dayInfo[] = [
+                            'type' => 'label',
+                            'text' => $name,
+                            'style' => [
+                                'background' => $statusColor,
+                                'padding' => '10',
+                            ],
+                            'action' => [
+                                'type' => '$href',
+                                'options' => [
+                                    'url' => $modalLink,
+                                    'transition' => 'modal',
+                                ],
+                            ]
+                        ];
+                    }
+
+                    $dayComponent = [
+                        'type' => 'vertical',
+                        'components' => $dayInfo
+                    ];
+
+                    $childStatuses[] = $dayComponent;
+                }
+
+                
+
+                $options = [
+                    "title" => "Manage Child",
+                    "description" => "Manage a child's privileges",
+                    "bodyTitle" => $this->child->name . "'s privileges for " . $startDay . " through " . $endDay,
+                    "includeFooter" => true,
+                    "sectionItems" => $childStatuses
+                ];
+
+                $jsonReturn = AndroidApp::createJasonetteWrapper($options);
+                $jsonReturn['$jason']['head']['actions'] = [
+                '$pull' => [
+                    "type" => '$reload'
+                ]
+            ];
+
+                return response()->json($jsonReturn);
+            }else{
+                return view('child-manage')->withChild($child)->with('allPrivileges', $allPrivileges)->with('jsonRequest', $this->jsonRequest);
+            }
         }else{
             $request->session()->flash('error', "You don't have the ability to manage that child");
             return redirect()->route('user.index');

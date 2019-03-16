@@ -29,4 +29,6 @@ Route::middleware('auth:api')->prefix('json')->group(function () {
 	Route::post('/child/{id}/privilege/ban', 'ChildrenController@banPrivilegeProcess')->name('child.privilege.ban.process.json');
 	Route::get('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilege')->name('child.privilege.restore.json');
 	Route::post('/child/{id}/privilege/restore', 'ChildrenController@restorePrivilegeProcess')->name('child.privilege.restore.process.json');
+
+	Route::get('/child/{id}/manage', 'ChildrenController@managePrivileges')->name('child.manage.json');
 });
