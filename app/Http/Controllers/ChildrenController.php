@@ -138,7 +138,7 @@ class ChildrenController extends BaseController
     }
 
     public function managePrivileges($id, $startDay = false, $endDay = false){
-    	if($startDay === false){
+        if($startDay === false){
             $startDay = Helpers::userTimeCurrent();
         }
 
@@ -147,7 +147,7 @@ class ChildrenController extends BaseController
         }
 
         $child = Child::find($id);
-    	//get the available privileges for the child
+        //get the available privileges for the child
         $allPrivileges = $this->childAvailPrivileges;
 
         $dateRange = Helpers::parseDateRange($startDay, $endDay);
@@ -178,29 +178,50 @@ class ChildrenController extends BaseController
                     "bodyTitle" => "Ban - " . $this->child->name,
                     "includeFooter" => true,
                     "sectionItems" => [
-                        [
-                            'type' => 'space',
-                            'height' => '10',
-                        ],
-                        [
-                            'type' => 'html',
-                            'text' => $renderedForm,
-                            'style' => [
-                                'height' => '100%',
-                            ],
-                            'action' => [
-                                'type' => '$default'
-                            ],
-                        ],
+                        // [
+                        //     'type' => 'space',
+                        //     'height' => '10',
+                        // ],
+                        // [
+                        //     'type' => 'html',
+                        //     'text' => $renderedForm,
+                        //     'style' => [
+                        //         'height' => '100%',
+                        //     ],
+                        //     'action' => [
+                        //         'type' => '$default'
+                        //     ],
+                        // ],
                     ]
                 ];
 
                 $jsonReturn = AndroidApp::createJasonetteWrapper($options);
                 $jsonReturn['$jason']['head']['data']['children'] = [];
                 $jsonReturn['$jason']['head']['actions'] = [
-                    '$pull' => [
-                        "type" => '$reload'
+                    // '$pull' => [
+                    //     "type" => '$reload'
+                    // ],
+                    // 'alertMessage' => [
+                    //     "type" => '$util.alert',
+                    //     "options" => [
+                    //         "title" => "Basic Alert",
+                    //         "description" => "I'm a basic alert. I simply display an alert that needs to be dismissed before moving forward"
+                    //     ],
+                    // ],
+                    'handleUrl' => [
+                        'type' => '$util.banner',
+                        "options" => [
+                            'title' => 'Link Clicked',
+                            "description" => '{{$jason.url}}'
+                        ]
                     ]
+                ];
+                $jsonReturn['$jason']['body']['background'] = [
+                    "type" => "html",
+                    "text" => $renderedForm,
+                    "action" => [
+                        "trigger" => "handleUrl"
+                    ],
                 ];
 
                 return response()->json($jsonReturn);

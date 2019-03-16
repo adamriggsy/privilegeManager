@@ -85,7 +85,7 @@ class HomeController extends BaseController
                         'size' => '18'
                     ]
                 ];
-
+                //dd($child->privilegeStatus);
                 foreach($child->privilegeStatus as $name => $status){
                     $statusText = $name . ' - ';
                     $statusText .= $status ? 'no' : 'yes';
@@ -93,6 +93,7 @@ class HomeController extends BaseController
                     $modalLink = $status ? 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/restore' : 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/ban';
 
                     $modalLink .= "?date=" . $now;
+                    $modalLink .= "&privilege=" . $name;
 
                     $childInfo[] = [
                         'type' => 'label',
