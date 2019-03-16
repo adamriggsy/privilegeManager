@@ -37,8 +37,11 @@
             <label for="privilege">Privilege to Restore: </label>
             <select name="privilege" class="form-control">
                 @foreach($allPrivileges as $aPrivilege)
-                    {{-- <option value="{{$aPrivilege->id}}" {{$parameters['privilege'] == $aPrivilege->name ? 'selected' : ''}}>{{$aPrivilege->name}}</option> --}}
-                    <option value="{{$aPrivilege->id}}">{{$aPrivilege->name}}</option>
+                    @if($jsonRequest)
+                        <option value="{{$aPrivilege->id}}" {{$parameters['privilege'] == $aPrivilege->name ? 'selected' : ''}}>{{$aPrivilege->name}}</option>
+                    @else
+                        <option value="{{$aPrivilege->id}}">{{$aPrivilege->name}}</option> 
+                    @endif
                 @endforeach
             </select>
         </div>

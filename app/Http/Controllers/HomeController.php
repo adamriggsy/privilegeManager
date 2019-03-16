@@ -93,7 +93,7 @@ class HomeController extends BaseController
                     $modalLink = $status ? 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/restore' : 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/privilege/ban';
 
                     $modalLink .= "?date=" . $now;
-                    $modalLink .= "&privilege=" . $name;
+                    $modalLink .= "&privilege=" . urlencode($name);
 
                     $childInfo[] = [
                         'type' => 'label',
