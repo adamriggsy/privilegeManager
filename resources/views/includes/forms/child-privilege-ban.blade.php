@@ -38,11 +38,11 @@
             
             <select name="privilege" class="form-control">
                 @foreach($allPrivileges as $aPrivilege)
-                    {{-- @if($jsonRequest)
+                    @if($jsonRequest)
                         <option value="{{$aPrivilege->id}}" {{$parameters['privilege'] == $aPrivilege->name ? 'selected' : ''}}>{{$aPrivilege->name}}</option>
-                    @else --}}
+                    @else
                         <option value="{{$aPrivilege->id}}">{{$aPrivilege->name}}</option> 
-                    {{-- @endif --}}
+                    @endif
                 @endforeach
             </select>
         </div>
