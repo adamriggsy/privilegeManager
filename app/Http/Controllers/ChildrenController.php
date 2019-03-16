@@ -198,16 +198,6 @@ class ChildrenController extends BaseController
                 $jsonReturn = AndroidApp::createJasonetteWrapper($options);
                 $jsonReturn['$jason']['head']['data']['children'] = [];
                 $jsonReturn['$jason']['head']['actions'] = [
-                    // '$pull' => [
-                    //     "type" => '$reload'
-                    // ],
-                    // 'alertMessage' => [
-                    //     "type" => '$util.alert',
-                    //     "options" => [
-                    //         "title" => "Basic Alert",
-                    //         "description" => "I'm a basic alert. I simply display an alert that needs to be dismissed before moving forward"
-                    //     ],
-                    // ],
                     'handleUrl' => [
                         'type' => '$util.banner',
                         "options" => [
