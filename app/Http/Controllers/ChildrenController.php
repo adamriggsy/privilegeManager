@@ -283,29 +283,39 @@ class ChildrenController extends BaseController
                     "bodyTitle" => "Restore - " . $this->child->name,
                     "includeFooter" => true,
                     "sectionItems" => [
-                        [
-                            'type' => 'space',
-                            'height' => '10',
-                        ],
-                        [
-                            'type' => 'html',
-                            'text' => $renderedForm,
-                            'style' => [
-                                'height' => '100%',
-                            ],
-                            'action' => [
-                                'type' => '$default'
-                            ],
-                        ],
+                        // [
+                        //     'type' => 'space',
+                        //     'height' => '10',
+                        // ],
+                        // [
+                        //     'type' => 'html',
+                        //     'text' => $renderedForm,
+                        //     'style' => [
+                        //         'height' => '100%',
+                        //     ],
+                        //     'action' => [
+                        //         'type' => '$default'
+                        //     ],
+                        // ],
                     ]
                 ];
 
                 $jsonReturn = AndroidApp::createJasonetteWrapper($options);
-                $jsonReturn['$jason']['head']['data']['children'] = [];
                 $jsonReturn['$jason']['head']['actions'] = [
-                    '$pull' => [
-                        "type" => '$reload',
+                    'handleUrl' => [
+                        'type' => '$util.banner',
+                        "options" => [
+                            'title' => 'Link Clicked',
+                            "description" => '{{$jason.url}}'
+                        ]
                     ]
+                ];
+                $jsonReturn['$jason']['body']['background'] = [
+                    "type" => "html",
+                    "text" => $renderedForm,
+                    "action" => [
+                        "trigger" => "handleUrl"
+                    ],
                 ];
 
                 return response()->json($jsonReturn);
