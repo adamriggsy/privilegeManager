@@ -140,8 +140,8 @@ class ChildrenController extends BaseController
     public function managePrivileges($id, $startDay = false, $endDay = false, Request $request){
         if(self::isUserChild($id, $this->jsonRequest) !== false){
             if($this->jsonRequest){
-                $startDay = Carbon::now();
-                $endDay = Carbon::now()->addDays(7);
+                $startDay = Carbon::now()->format('Y-m-d');
+                $endDay = Carbon::now()->addDays(7)->format('Y-m-d');
             }
 
             if($startDay === false){
@@ -161,12 +161,19 @@ class ChildrenController extends BaseController
             $child = Child::setPrivilegeStatus($child, $allPrivileges, $dateRange);
             
             if($this->jsonRequest){
-                
-                $childStatuses = [];
+                $childStatuses = [
+                    [
+                        'type' => 'label',
+                        'text' => "Last updated: " . Helpers::userTimeCurrent('m-d-Y H:i:s'),
+                        'style' => [
+                            'align' => 'center'
+                        ]
+                    ]
+                ];
 
                 foreach($child->privilegeStatus as $date => $privileges){
                     $dayInfo = [];
-                    $dayInfo = [
+                    $dayInfo[] = [
                         'type' => 'label',
                         'text' => $date,
                         'style' => [

@@ -87,7 +87,7 @@ class HomeController extends BaseController
                     'action' =>[
                         'type' => '$href',
                         'options' => [
-                            'url' => 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . 'manage',
+                            'url' => 'http://manage.riggsdesignsolutions.com/api/json/child/' . $child->id . '/manage',
                             'transition' => 'replace'
                         ]
                     ]
